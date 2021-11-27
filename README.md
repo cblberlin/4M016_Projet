@@ -10,6 +10,6 @@ sudo apt-get install expat
 
 ## Usage
 ```bash
-make
+make 
 ./bin/main
 ```
