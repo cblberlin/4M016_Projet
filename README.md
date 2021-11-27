@@ -5,6 +5,11 @@ Le projet pour implémenter l'algorithme Dijkstra en c
 sous Linux: 
 ```bash
 sudo apt-get install git
+sudo apt-get install expat
+```
 
-git clone https://github.com/cblberlin/4M016_Projet.git
+## Usage
+```bash
+make
+./bin/main
 ```
