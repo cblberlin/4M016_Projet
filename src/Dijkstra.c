@@ -1,6 +1,7 @@
 #include <stdbool.h>
 #include <math.h>
 #include "Dijkstra.h"
+#include "min_heap.h"
 
 /*
 with given single source vertex and single destination vertex,

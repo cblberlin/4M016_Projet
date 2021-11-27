@@ -67,7 +67,7 @@ void print_graph(M_Graph *g){
     }
 }
 
-/* TODO
+/*
 return a graph with n vertices and v edges with random weight of type double
 this will be an undirected and connected graph without cycle
 */
