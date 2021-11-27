@@ -1,9 +1,10 @@
 # 4M016_Projet
 Le projet pour implémenter l'algorithme Dijkstra en c
 
-## install git
+## Installation
 sous Linux: 
-
+```bash
 sudo apt-get install git
 
-git clone 
+git clone https://github.com/cblberlin/4M016_Projet.git
+```
