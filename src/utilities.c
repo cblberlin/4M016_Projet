@@ -1,7 +1,15 @@
-#include <stdio.h>
+#include <string.h>
 #include <stdlib.h>
 #include <math.h>
- 
+
+#include "utilities.h"
+
+/*
+    this function will convert an integer to a character or string
+    ex: 0 -> A
+        26 -> AA
+*/
+
 const char* ALPHAPHET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
 char* int2char(int n){
@@ -21,23 +29,5 @@ char* int2char(int n){
         return c;
     }
 }
- 
-int main()
-{
-    int n;
- 
-    scanf("%d", &n);
-    char* res = (char* ) malloc(sizeof(char));
-    //res = int2char(n);
-    //printf("%s\n", res);
-    //printf("%d\n", (int) (log(n - 26) / log(26) + 1));
-    /*char** names = (char**) malloc(n * sizeof(char*));
-    for(int i = 0; i < n; i++){
-       names[i] = (char*) malloc(sizeof(char));
-       names[i] = int2char(i);
-       printf("%s\n", names[i]);
-    }*/
-    res = int2char(n);
-    printf("%s\n", res);
-    return 0;
-}
+
+#include "utilities.h"

@@ -26,9 +26,11 @@ void free_graph(M_Graph* g);
 
 void add_Edge(M_Graph* g, unsigned int i, unsigned int j, double weight);
 
+void print_names(M_Graph* g);
+
 void print_graph(M_Graph *g);
 
-M_Graph* create_graph_random(int n, int v, double max_weight);
+M_Graph* create_graph_random(M_Graph*g, int n, int v, double max_weight);
 
 int* neihbors(M_Graph* g, int n);
 

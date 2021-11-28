@@ -2,6 +2,7 @@
 #include <string.h>
 #include <time.h>
 #include "M_Graph.h"
+#include "utilities.h"
 
 
 /*
@@ -21,8 +22,11 @@ M_Graph* init_graph(int n){
 
     /* initialise as no edge in this graph*/
     for(int i = 0; i < g->N_vertex; i++){
-        char c = i + '0';
-        g->Names[i] = &c;
+        //printf("%c\n", c);
+        char* c = (char* ) malloc(sizeof(char));
+        c = int2char(i);
+        g->Names[i] = c;
+        //printf("%s\t", g->Names[i]);
         for(int j = 0; j < g->N_vertex; j++){
             if(i == j){
                 g->weights[i][j] = 0.;
@@ -58,8 +62,21 @@ void add_Edge(M_Graph* g, unsigned int i, unsigned int j, double weight){
     g->N_edge++;
 }
 
-void print_graph(M_Graph *g){
+void print_names(M_Graph* g){
     for(int i = 0; i < g->N_vertex; i++){
+        printf("%s\t", g->Names[i]);
+    }
+    printf("\n");
+}
+
+void print_graph(M_Graph *g){
+    printf("\t");
+    for(int i = 0; i < g->N_vertex; i++){
+        printf("%s\t", g->Names[i]);
+    }
+    printf("\n");
+    for(int i = 0; i < g->N_vertex; i++){
+        printf("%s\t", g->Names[i]);
         for(int j = 0; j < g->N_vertex; j++){
             printf("%.3f\t", g->weights[i][j]);
         }
@@ -71,9 +88,8 @@ void print_graph(M_Graph *g){
 return a graph with n vertices and v edges with random weight of type double
 this will be an undirected and connected graph without cycle
 */
-M_Graph* create_graph_random(int n, int e, double max_weight){
+M_Graph* create_graph_random(M_Graph*g, int n, int e, double max_weight){
     assert(e <= n * (n - 1) / 2);
-    M_Graph* g = init_graph(n);
     g->N_edge = e;
     srand(time(NULL));
     int count;
@@ -91,11 +107,6 @@ M_Graph* create_graph_random(int n, int e, double max_weight){
             count++;
             //printf("%f\n", temp);
         }
-    }
-
-    for(int i = 0; i < n; i++){
-        char c = i + '0';
-        g->Names[i] = &c;
     }
     return g;
 }

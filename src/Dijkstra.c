@@ -6,7 +6,7 @@
 /*
 with given single source vertex and single destination vertex,
 return the minimum length of path with algo dijkstra
-using min-heap
+without using min-heap
 */
 void single_source_dijkstra(M_Graph* g, int src, double* dist, int* prev){
     int i, j, k;
@@ -51,4 +51,8 @@ void single_source_dijkstra(M_Graph* g, int src, double* dist, int* prev){
     for(i = 0; i < g->N_vertex; i++){
         printf("shortest(%s, %s)=%f\n", g->Names[src], g->Names[i], dist[i]);
     }
+}
+
+void single_source_dijkstra_min_heap(M_Graph* g, int src, double* dist, int* prev){
+    
 }

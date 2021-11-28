@@ -92,7 +92,7 @@ void swap(double* n1, double* n2){
     we start the index by 0;
 */
 void init_heap(min_heap* heap, int n){
-    min_heap* heap = (min_heap *) malloc(sizeof(min_heap));
+    heap = (min_heap *) malloc(sizeof(min_heap));
     heap->size = n;
     if(heap == NULL){
         printf("Memory Error!\n");
@@ -118,14 +118,14 @@ bool heap_empty(min_heap* heap){
 }
 
 void heap_push(min_heap* heap, double val){
-    
+
 }
 
-double extractMin(min_heap* heap){
+/*double extractMin(min_heap* heap){
     double min = INFINITY;
 
     for(int i = 0; i < heap->size; i++){
         if( heap->data[i] )
     }
-}
+}*/
 
