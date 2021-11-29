@@ -17,11 +17,11 @@ int main(){
     scanf("%lf", &max_weight);
     M_Graph* g = (M_Graph*) malloc(sizeof(M_Graph));
     g = init_graph(n);
-
+    printf("test\n");
     g = create_graph_random(g, n, e, max_weight);
-    printf("The adjacency matrix of graph is: \n");
+    //printf("The adjacency matrix of graph is: \n");
 
-    print_graph(g);
+    //print_graph(g);
     double* dist = (double *) malloc(g->N_vertex * sizeof(double));
     int* prev = (int *) malloc(g->N_vertex * sizeof(int));
     single_source_dijkstra(g, 0, dist, prev);

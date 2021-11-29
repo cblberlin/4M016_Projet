@@ -26,6 +26,7 @@ M_Graph* init_graph(int n){
         char* c = (char* ) malloc(sizeof(char));
         c = int2char(i);
         g->Names[i] = c;
+        //free(c);
         //printf("%s\t", g->Names[i]);
         for(int j = 0; j < g->N_vertex; j++){
             if(i == j){

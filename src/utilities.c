@@ -6,8 +6,11 @@
 
 /*
     this function will convert an integer to a character or string
-    ex: 0 -> A
-        26 -> AA
+    ex: 0   -> A
+        26  -> AA
+        702 -> AAA
+    this will be useful for naming the vertex of a random graph
+    with a great number of vertices
 */
 
 const char* ALPHAPHET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -19,7 +22,7 @@ char* int2char(int n){
         return c;
     }
     else{
-        int length = (int) (log(n - 26) / log(26) + 1);
+        int length = (int) (log(n) / log(26) + 1);
         char* c = (char* ) malloc(sizeof(char) * length);
         for(int i = 0; i < length - 1; i++){
            c[i] = ALPHAPHET[n / (int) pow(26, length - i - 1) - 1];
@@ -29,5 +32,3 @@ char* int2char(int n){
         return c;
     }
 }
-
-#include "utilities.h"
