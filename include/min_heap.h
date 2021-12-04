@@ -58,4 +58,6 @@ node ExtractMin(min_heap* heap);
 
 void Relax(min_heap* heap, node* u, node* v, double w);
 
+void print_heap(min_heap* heap);
+
 #endif

@@ -114,3 +114,20 @@ void Relax(min_heap* heap, node* u, node* v, double w){
         v->prev = u->index;
     }
 }
+
+/*
+    print heap with value
+*/
+void print_heap(min_heap* heap){
+    int n = (int) log2(heap->tail) + 1;
+	printf("Heap is:\n");
+	printf("%f\n", heap->nodes[0].weight);
+	for(int i = 1; i < n; i++){
+		for(int j = pow(2,i) - 1; j < pow(2, i + 1) - 1; j++){
+			if(j < heap->tail){
+				printf("%f\t", heap->nodes[j].weight);
+			}
+		}
+		printf("\n");
+	}
+}
