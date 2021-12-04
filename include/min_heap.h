@@ -30,7 +30,7 @@ typedef struct node_{
 /*
     size is the maximum number of queue allowed
     tail is the position of the last item in heap
-    data is the array of weights with size n
+    data is the array of node with size n
 */
 typedef struct min_heap_{
     node* nodes;
@@ -42,14 +42,20 @@ void swap(node* n1, node* n2);
 
 void init_heap(min_heap* heap, int n);
 
-void free_heap(min_heap* heap);
-
-void heap_push(min_heap* heap, double val);
-
-double heap_pop(min_heap* heap);
+void init_node(node* n);
 
 bool heap_empty(const min_heap* heap);
 
-double extractMin(min_heap* heap);
+void free_heap(min_heap* heap);
+
+void Heapify(min_heap* heap, int i);
+
+void DecreaseKey(min_heap* heap, node* x, double val);
+
+void Insert(min_heap* heap, node* x);
+
+node ExtractMin(min_heap* heap);
+
+void Relax(min_heap* heap, node* u, node* v, double w);
 
 #endif
