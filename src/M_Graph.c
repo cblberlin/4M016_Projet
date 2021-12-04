@@ -112,11 +112,13 @@ M_Graph* create_graph_random(M_Graph*g, int n, int e, double max_weight){
     return g;
 }
 
-int* neihbors(M_Graph* g, int n){
+/*
+    return an array of index the neihbors of n
+*/
+int* Neihbors(M_Graph* g, int n){
     int* neihbor = (int *) malloc(g->N_vertex * sizeof(int));
     int count = 0;
     for(int i = 0; i < g->N_vertex; i++){
-
         if(i != n && (g->weights[i][n] != INFINITY)){
             neihbor[count] = i;
             count++;
