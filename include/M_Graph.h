@@ -32,6 +32,6 @@ void print_graph(M_Graph *g);
 
 M_Graph* create_graph_random(M_Graph*g, int n, int v, double max_weight);
 
-int* neihbors(M_Graph* g, int n);
+int* Neihbors(M_Graph* g, int n);
 
 #endif
