@@ -42,6 +42,16 @@ M_Graph* init_graph(int n){
 }
 
 /*
+    TODO
+    read graph from a file
+*/
+M_Graph* read_graph(char* filename){
+    M_Graph* g = (M_Graph*) malloc(sizeof(M_Graph));
+    //init_graph(g);
+    return g;
+}
+
+/*
 destroy a graph
 */
 void free_graph(M_Graph* g){

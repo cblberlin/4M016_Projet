@@ -54,9 +54,7 @@ void single_source_dijkstra(M_Graph* g, int src, double* dist, int* prev){
 }
 
 void single_source_dijkstra_min_heap(M_Graph* g, int src, double* dist, int* prev){
-    min_heap* heap = malloc(sizeof(min_heap));
-    //printf("test\n");
-    init_heap(heap, g->N_vertex);
+    min_heap* heap = init_heap(g->N_vertex);
 
     for(int i = 0; i < g->N_vertex; i++){
         prev[i] = -1;
@@ -66,35 +64,36 @@ void single_source_dijkstra_min_heap(M_Graph* g, int src, double* dist, int* pre
 
     // Enqueue all the nodes
     for(int i = 0; i < g->N_vertex; i++){
-        node* v = (node*) malloc(sizeof(node));
-        v->index = i;
-        v->prev = -1;
-        v->weight = dist[i];
+        node v;
+        v.index = i;
+        v.prev = -1;
+        v.weight = dist[i];
         Insert(heap, v);
     }
+
+    //print_heap(heap);
     
     while(!heap_empty(heap)){
-        node* u = malloc(sizeof(node));
-        init_node(u);
-        //printf("test\n");
-        *u = ExtractMin(heap);
-        printf("%d\n", u->index);
+        node u = ExtractMin(heap);
 
         for(int i = 0; i < g->N_vertex; i++){
-            node* v = malloc(sizeof(node));
-            init_node(v);
-            if(g->weights[u->index][i] != INFINITY && i != u->index){
-                v->index = i;
-                v->prev = prev[i];
-                v->weight = dist[i];
-                dist[i] = dist[u->index] + g->weights[u->index][v->index]; 
-                Relax(heap, u, v, dist[i]);   
-                v->prev = u->index;            
+            if(g->weights[u.index][i] != INFINITY && i != u.index){
+                node v;
+                v.index = i;
+                v.prev = prev[i];
+                v.weight = dist[i];
+                if(dist[u.index] + g->weights[u.index][v.index] < dist[v.index]){
+                    dist[v.index] = dist[u.index] + g->weights[u.index][v.index];
+                    DecreaseKey(heap, &v, dist[v.index]);
+                    v.prev = u.index;
+                    prev[v.index] = u.index;
+                }         
             }
         }
     }
     printf("dijkstra(%s): \n", g->Names[src]);
     for(int i = 0; i < g->N_vertex; i++){
         printf("shortest(%s, %s)=%f\n", g->Names[src], g->Names[i], dist[i]);
+        
     }
 }

@@ -2,10 +2,10 @@
 #include <stdlib.h>
 #include "min_heap.h"
 
-void swap(node* n1, node* n2){
-    node temp = *n1;
-    *n1 = *n2;
-    *n2 = temp;
+void swap(node* x1, node* x2){
+    node temp = *x1;
+    *x1 = *x2;
+    *x2 = temp;
 }
 
 /*
@@ -13,27 +13,12 @@ void swap(node* n1, node* n2){
     and the size of the min heap will be n.
     we start the index by 0;
 */
-void init_heap(min_heap* heap, int n){
-    //heap = (min_heap*)malloc(sizeof(min_heap));
-    heap->size = n;
-    if(heap == NULL){
-        printf("Memory Error!\n");
-        return;
-    }
-    heap->nodes = (node*)malloc(sizeof(node) * n);
-    for(int i = 0; i < n; i++){
-        heap->nodes[i].prev = 0;
-    }
-    heap->size = n;
-    heap->tail = 0; 
-}
-/*
-    Initialisation of a node
-*/
-void init_node(node* n){
-    n->index = 0;
-    n->weight = 0.;
-    n->prev = 0;
+min_heap* init_heap(int n){
+    min_heap* h = malloc(sizeof(min_heap));
+    h->nodes = malloc(sizeof(node) * n);
+    h->size = n;
+    h->tail = 0;
+    return h;
 }
 
 void free_heap(min_heap* heap){
@@ -51,19 +36,24 @@ bool heap_empty(const min_heap* heap){
     return false;
 }
 
-/*
-    The following algorithm can be used to “fix” an array not necessarily
-    satisfying the heap property.
-*/
-void Heapify(min_heap* heap, int i){
-    int smallest = (CHILD_LEFT(i) < heap->size && heap->nodes[CHILD_LEFT(i)].weight < heap->nodes[i].weight) ? CHILD_LEFT(i) : i ;
-    if(CHILD_RIGHT(i) < heap->size && heap->nodes[CHILD_RIGHT(i)].weight < heap->nodes[smallest].weight) {
-        smallest = CHILD_RIGHT(i) ;
+void heapifyUP(min_heap*h ,int n){
+    if(n == 0) return;
+    int parent = PARENT(n);
+    if(h->nodes[n].weight >= h->nodes[parent].weight) return;
+    swap(&h->nodes[n], &h->nodes[parent]);
+    heapifyUP(h, parent);
+}
+
+void heapifyDown(min_heap*h, int n){
+    int smallest = n;
+    for(int i = n * 2 + 1; i <= n * 2 + 2; i++){
+        if(i < h->tail - 1 && h->nodes[i].weight < h->nodes[smallest].weight){
+            smallest = i;
+        }
     }
-    if(smallest != i) {
-        swap(&(heap->nodes[i]), &(heap->nodes[smallest])) ;
-        Heapify(heap, smallest) ;
-    }
+    if(smallest == n) return;
+    swap(&h->nodes[n], &h->nodes[smallest]);
+    heapifyDown(h, smallest);
 }
 
 /*
@@ -74,34 +64,33 @@ void DecreaseKey(min_heap* heap, node* x, double val){
         return;
     }
     heap->nodes[x->index].weight = val;
-    while(x->index > 0 && heap->nodes[PARENT(x->index)].weight > heap->nodes[x->index].weight){
+    while(x->index > 0 && heap->nodes[PARENT(x->index)].weight > heap->nodes[x->index].weight){ 
         swap(&heap->nodes[x->index], &heap->nodes[PARENT(x->index)]);
-        heap->nodes[x->index] = heap->nodes[PARENT(x->index)];
+        heap->nodes[x->index].index = heap->nodes[PARENT(x->index)].index;
     }
 }
 
 /*
     insert a val to the heap and the heap maintain min-heap properties
 */
-void Insert(min_heap* heap, node* x){
-    heap->tail++;
-    x->index = heap->tail;
-    heap->nodes[1] = *x;
-    DecreaseKey(heap, x, x->weight);
+void Insert(min_heap* h, node x){
+    // add element at the end of array
+    h->nodes[h->tail] = x;
+    //printf("%d\n", h->nodes[h->tail].index);
+    // maintain min heap property
+    heapifyUP(h, h->tail);
+    h->tail++;
 }
 
 /*
     delete the node with minimum key in the heap and maintain the min heap property
 */
-node ExtractMin(min_heap* heap){
-    if(heap->tail < 0){
-        fprintf(stderr, "Heap underflow");
-    }
-    node min = heap->nodes[0];
-    heap->nodes[0] = heap->nodes[heap->tail];
-    heap->tail--;
-    Heapify(heap, 0);
-    return min;
+node ExtractMin(min_heap* h){
+    node u = h->nodes[0];
+    swap(&h->nodes[h->tail - 1], &h->nodes[0]);
+    heapifyDown(h, 0);
+    h->tail--;
+    return u;
 }
 
 /*
@@ -121,14 +110,19 @@ void Relax(min_heap* heap, node* u, node* v, double w){
 void print_heap(min_heap* heap){
     int n = (int) log2(heap->tail) + 1;
 	printf("Heap is:\n");
-	printf("%f\n", heap->nodes[0].weight);
+	printf("%.3f\n", heap->nodes[0].weight);
+    //printf("0\n");
 	for(int i = 1; i < n; i++){
 		for(int j = pow(2,i) - 1; j < pow(2, i + 1) - 1; j++){
 			if(j < heap->tail){
-				printf("%f\t", heap->nodes[j].weight);
+				printf("%.3f\t", heap->nodes[j].weight);
+                //printf("%d\t", j);
 			}
 		}
 		printf("\n");
 	}
 }
 
+void test_heap(min_heap* heap){
+    
+}

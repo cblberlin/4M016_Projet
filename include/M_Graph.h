@@ -22,6 +22,8 @@ typedef struct M_Graph_{
 
 M_Graph* init_graph(int n);
 
+M_Graph* read_graph(char* filename);
+
 void free_graph(M_Graph* g);
 
 void add_Edge(M_Graph* g, unsigned int i, unsigned int j, double weight);

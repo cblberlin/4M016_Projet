@@ -21,7 +21,7 @@ int main(){
     g = create_graph_random(g, n, e, max_weight);
     printf("The adjacency matrix of graph is: \n");
 
-    print_graph(g);
+    //print_graph(g);
     double* dist = (double *) malloc(g->N_vertex * sizeof(double));
     int* prev = (int *) malloc(g->N_vertex * sizeof(int));
     printf("result without min heap\n");
@@ -32,6 +32,8 @@ int main(){
     
     printf("result with min heap\n");
     single_source_dijkstra_min_heap(g,0, dist, prev);
+
+
     
     return 0;
 }
