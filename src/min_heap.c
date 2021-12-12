@@ -66,7 +66,11 @@ void DecreaseKey(min_heap* heap, node* x, double val){
     heap->nodes[x->index].weight = val;
     while(x->index > 0 && heap->nodes[PARENT(x->index)].weight > heap->nodes[x->index].weight){ 
         swap(&heap->nodes[x->index], &heap->nodes[PARENT(x->index)]);
+        /*
+        int temp = heap->nodes[x->index].index;
         heap->nodes[x->index].index = heap->nodes[PARENT(x->index)].index;
+        heap->nodes[PARENT(x->index)].index = temp;
+        */
     }
 }
 
@@ -123,6 +127,10 @@ void print_heap(min_heap* heap){
 	}
 }
 
-void test_heap(min_heap* heap){
-    
+int* index_heap(min_heap* heap){
+    int* index = (int*) malloc(sizeof(int) * heap->tail);  
+    for(int i = 0; i < heap->tail; i++){
+        index[i] = heap->nodes[i].index;
+    }
+    return index;
 }

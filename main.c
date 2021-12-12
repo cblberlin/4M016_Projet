@@ -26,9 +26,6 @@ int main(){
     int* prev = (int *) malloc(g->N_vertex * sizeof(int));
     printf("result without min heap\n");
     single_source_dijkstra(g, 0, dist, prev);
-
-    min_heap* h = malloc(sizeof(min_heap));
-    init_heap(h, n);
     
     printf("result with min heap\n");
     single_source_dijkstra_min_heap(g,0, dist, prev);

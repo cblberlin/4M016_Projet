@@ -3,6 +3,8 @@
 #include "Dijkstra.h"
 #include "min_heap.h"
 
+#define DEBUG 0
+
 /*
 with given single source vertex and single destination vertex,
 return the minimum length of path with algo dijkstra
@@ -49,16 +51,32 @@ void single_source_dijkstra(M_Graph* g, int src, double* dist, int* prev){
     }
     printf("dijkstra(%s): \n", g->Names[src]);
     for(i = 0; i < g->N_vertex; i++){
+        int temp = i;
+        bool arrived = (temp == src);
         printf("shortest(%s, %s)=%f\n", g->Names[src], g->Names[i], dist[i]);
+        if(temp == src){
+            printf("the path is %s -> %s\n", g->Names[src], g->Names[temp]);
+        }else{
+            printf("the path is\t");
+            while(!arrived){
+                printf("%s -> %s\t", g->Names[temp], g->Names[prev[temp]]);
+                temp = prev[temp];
+                arrived = (temp == src);
+                //printf("\n");
+            }
+            printf("\n");
+        }
     }
+
 }
 
 void single_source_dijkstra_min_heap(M_Graph* g, int src, double* dist, int* prev){
     min_heap* heap = init_heap(g->N_vertex);
-
+    bool* flag = (bool *) malloc(sizeof(bool) * g->N_vertex);
     for(int i = 0; i < g->N_vertex; i++){
         prev[i] = -1;
         dist[i] = INFINITY;
+        flag[i] = false;
     }
     dist[src] = 0.;
 
@@ -75,25 +93,41 @@ void single_source_dijkstra_min_heap(M_Graph* g, int src, double* dist, int* pre
     
     while(!heap_empty(heap)){
         node u = ExtractMin(heap);
-
+        flag[u.index] = true;
         for(int i = 0; i < g->N_vertex; i++){
             if(g->weights[u.index][i] != INFINITY && i != u.index){
                 node v;
                 v.index = i;
                 v.prev = prev[i];
                 v.weight = dist[i];
-                if(dist[u.index] + g->weights[u.index][v.index] < dist[v.index]){
-                    dist[v.index] = dist[u.index] + g->weights[u.index][v.index];
-                    DecreaseKey(heap, &v, dist[v.index]);
-                    v.prev = u.index;
-                    prev[v.index] = u.index;
-                }         
+                if(flag[v.index] == false){
+                    double temp = dist[u.index] + g->weights[u.index][v.index];
+                    if(temp < dist[v.index]){
+                        dist[v.index] = temp;
+                        prev[v.index] = u.index;
+                        DecreaseKey(heap, &v, dist[v.index]);
+                        v.prev = u.index;
+                    }
+                }      
             }
         }
     }
     printf("dijkstra(%s): \n", g->Names[src]);
     for(int i = 0; i < g->N_vertex; i++){
+        int temp = i;
+        bool arrived = (temp == src);
         printf("shortest(%s, %s)=%f\n", g->Names[src], g->Names[i], dist[i]);
-        
+        if(temp == src){
+            printf("the path is %s -> %s\n", g->Names[src], g->Names[temp]);
+        }else{
+            printf("the path is\t");
+            while(!arrived){
+                printf("%s -> %s\t", g->Names[temp], g->Names[prev[temp]]);
+                temp = prev[temp];
+                arrived = (temp == src);
+                //printf("\n");
+            }
+            printf("\n");
+        }
     }
 }
