@@ -71,7 +71,8 @@ void single_source_dijkstra(M_Graph* g, int src, double* dist, int* prev){
 }
 
 void single_source_dijkstra_min_heap(M_Graph* g, int src, double* dist, int* prev){
-    min_heap* heap = init_heap(g->N_vertex);
+    min_heap* heap = (min_heap *) malloc(sizeof(min_heap));
+    init_heap(heap);
     bool* flag = (bool *) malloc(sizeof(bool) * g->N_vertex);
     for(int i = 0; i < g->N_vertex; i++){
         prev[i] = -1;
@@ -84,7 +85,7 @@ void single_source_dijkstra_min_heap(M_Graph* g, int src, double* dist, int* pre
     for(int i = 0; i < g->N_vertex; i++){
         node v;
         v.index = i;
-        v.prev = -1;
+        //v.prev = -1;
         v.weight = dist[i];
         Insert(heap, v);
     }
@@ -92,23 +93,33 @@ void single_source_dijkstra_min_heap(M_Graph* g, int src, double* dist, int* pre
     //print_heap(heap);
     
     while(!heap_empty(heap)){
-        node u = ExtractMin(heap);
-        flag[u.index] = true;
+        node u = Top(heap);
+        Pop(heap);
+        if(DEBUG){
+            printf("the current node is %s\n", g->Names[u.index]);
+        }
+        //flag[u.index] = true;
         for(int i = 0; i < g->N_vertex; i++){
             if(g->weights[u.index][i] != INFINITY && i != u.index){
                 node v;
                 v.index = i;
-                v.prev = prev[i];
+                //v.prev = prev[i];
                 v.weight = dist[i];
-                if(flag[v.index] == false){
-                    double temp = dist[u.index] + g->weights[u.index][v.index];
-                    if(temp < dist[v.index]){
-                        dist[v.index] = temp;
-                        prev[v.index] = u.index;
-                        DecreaseKey(heap, &v, dist[v.index]);
-                        v.prev = u.index;
-                    }
-                }      
+                if(DEBUG){
+                    printf("the examinating node is %s\n", g->Names[v.index]);
+                }
+                if(flag[v.index] == true){
+                    continue;
+                }
+                flag[u.index] = true;
+                double temp = dist[u.index] + g->weights[u.index][v.index];
+                if(temp < dist[v.index]){
+                    dist[v.index] = temp;
+                    prev[v.index] = u.index;
+                    DecreaseKey(heap, v.index, dist[v.index]);
+                    //v.prev = u.index;
+                }
+                   
             }
         }
     }

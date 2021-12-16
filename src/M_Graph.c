@@ -47,6 +47,8 @@ M_Graph* init_graph(int n){
 */
 M_Graph* read_graph(char* filename){
     M_Graph* g = (M_Graph*) malloc(sizeof(M_Graph));
+    char* line = malloc(sizeof(char));
+    
     //init_graph(g);
     return g;
 }
