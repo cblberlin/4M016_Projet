@@ -16,13 +16,9 @@ quick define left(right) child and parent node function
 #define CHILD_RIGHT(i) (2*i + 2)
 #define PARENT(i) ((i-1) / 2)
 
-/*
-    index is the index of this node in graph
-    weight is the weight calculated for this node
-*/
 typedef struct node_{
-    int index;
     double weight;
+    int index;
 }node;
 
 /*
@@ -40,32 +36,28 @@ typedef struct node_{
 */
 typedef struct min_heap_{
     node* nodes;
-    int size;
-    int count;
+    int capacity;
+    int index;
 }min_heap;
 
-void swap(node* n1, node* n2);
+void swap(node* x, node* y);
 
-min_heap* init_heap(min_heap* h);
+min_heap* init_heap(int Max_capacity);
 
 bool heap_empty(const min_heap* heap);
+
+bool heap_full(const min_heap* heap);
 
 void free_heap(min_heap* heap);
 
 void heapify(min_heap*h, int index);
 
-void DecreaseKey(min_heap* heap, int i, double val);
-
 void Insert(min_heap* h, node x);
 
-void Pop(min_heap* h);
+void DecreaseKey(min_heap* heap, int i, double val);
 
-node Top(min_heap* h);
+node ExtractMin(min_heap* h);
 
-//void Relax(min_heap* heap, node* u, node* v, double w);
-
-void print_heap(min_heap* heap);
-
-int* index_heap(min_heap* heap);
+int* index_heap(min_heap* h);
 
 #endif

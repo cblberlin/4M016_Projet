@@ -3,7 +3,7 @@
 #include "Dijkstra.h"
 #include "min_heap.h"
 
-#define DEBUG 0
+#define DEBUG 1
 
 /*
 with given single source vertex and single destination vertex,
@@ -49,7 +49,7 @@ void single_source_dijkstra(M_Graph* g, int src, double* dist, int* prev){
             }
         }
     }
-    printf("dijkstra(%s): \n", g->Names[src]);
+    printf("\ndijkstra(%s): \n", g->Names[src]);
     for(i = 0; i < g->N_vertex; i++){
         int temp = i;
         bool arrived = (temp == src);
@@ -71,8 +71,14 @@ void single_source_dijkstra(M_Graph* g, int src, double* dist, int* prev){
 }
 
 void single_source_dijkstra_min_heap(M_Graph* g, int src, double* dist, int* prev){
-    min_heap* heap = (min_heap *) malloc(sizeof(min_heap));
-    init_heap(heap);
+    min_heap* heap = init_heap(g->N_vertex);
+    if(DEBUG){
+        printf("The min heap has been succefully allocated\n");
+        printf("The capacity of the min heap is %d\n", heap->capacity);
+        printf("The current index of the min heap is %d\n", heap->index);
+        //printf("The first node of the min heap is %.3f\n", heap->weights[0]);
+
+    }
     bool* flag = (bool *) malloc(sizeof(bool) * g->N_vertex);
     for(int i = 0; i < g->N_vertex; i++){
         prev[i] = -1;
@@ -80,50 +86,53 @@ void single_source_dijkstra_min_heap(M_Graph* g, int src, double* dist, int* pre
         flag[i] = false;
     }
     dist[src] = 0.;
-
+    
     // Enqueue all the nodes
     for(int i = 0; i < g->N_vertex; i++){
-        node v;
-        v.index = i;
-        //v.prev = -1;
-        v.weight = dist[i];
-        Insert(heap, v);
+        node x;
+        x.index = i;
+        x.weight = dist[i];
+        Insert(heap, x);
     }
 
     //print_heap(heap);
     
     while(!heap_empty(heap)){
-        node u = Top(heap);
-        Pop(heap);
-        if(DEBUG){
-            printf("the current node is %s\n", g->Names[u.index]);
+        if(DEBUG) {
+            printf("\tIndex\tNode\tDist\n");
+                for (int i = 0; i < heap->index; i++) {
+                printf("\t%d\t%s\t%.3f\n", heap->nodes[i].index, g->Names[heap->nodes[i].index], heap->nodes[i].weight);
+            }
         }
-        //flag[u.index] = true;
+        node u = ExtractMin(heap);
+        if(DEBUG) {
+            printf("\t -> Exploration in %s.\n", g->Names[u.index]);
+        }
+        flag[u.index] = true;
+        //int* index = index_heap(heap);
         for(int i = 0; i < g->N_vertex; i++){
-            if(g->weights[u.index][i] != INFINITY && i != u.index){
+            if(g->weights[u.index][i] != INFINITY && i != u.index && flag[i] == false){
                 node v;
                 v.index = i;
-                //v.prev = prev[i];
                 v.weight = dist[i];
-                if(DEBUG){
-                    printf("the examinating node is %s\n", g->Names[v.index]);
+                if(DEBUG) {
+                    printf("\t\tExaminating the edge %s->%s and the weight is\t%.3f\n", g->Names[u.index], g->Names[v.index], g->weights[u.index][v.index]);
                 }
-                if(flag[v.index] == true){
-                    continue;
-                }
-                flag[u.index] = true;
                 double temp = dist[u.index] + g->weights[u.index][v.index];
                 if(temp < dist[v.index]){
                     dist[v.index] = temp;
                     prev[v.index] = u.index;
-                    DecreaseKey(heap, v.index, dist[v.index]);
-                    //v.prev = u.index;
+                    DecreaseKey(heap, v.index, temp);
                 }
                    
             }
+            
+        }
+        if(DEBUG) {
+            printf("\tAfter relaxation the node %s minimum weight is\t%.3f\n", g->Names[u.index], dist[u.index]);
         }
     }
-    printf("dijkstra(%s): \n", g->Names[src]);
+    printf("\ndijkstra(%s): \n", g->Names[src]);
     for(int i = 0; i < g->N_vertex; i++){
         int temp = i;
         bool arrived = (temp == src);

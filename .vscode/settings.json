@@ -17,5 +17,6 @@
         "unordered_map": "c",
         "utility": "c",
         "vector": "c"
-    }
+    },
+    "C_Cpp.errorSquiggles": "Disabled"
 }

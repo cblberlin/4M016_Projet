@@ -17,18 +17,20 @@ int main(){
     scanf("%lf", &max_weight);
     M_Graph* g = (M_Graph*) malloc(sizeof(M_Graph));
     g = init_graph(n);
-    printf("test\n");
+    //printf("test\n");
     g = create_graph_random(g, n, e, max_weight);
-    printf("The adjacency matrix of graph is: \n");
+    //printf("The adjacency matrix of graph is: \n");
 
     //print_graph(g);
     double* dist = (double *) malloc(g->N_vertex * sizeof(double));
     int* prev = (int *) malloc(g->N_vertex * sizeof(int));
-    printf("result without min heap\n");
+    printf("\nresult without min heap\n");
     single_source_dijkstra(g, 0, dist, prev);
     
-    printf("result with min heap\n");
-    single_source_dijkstra_min_heap(g,0, dist, prev);
+    double* dist_min_heap = (double *) malloc(g->N_vertex * sizeof(double));
+    int* prev_min_heap = (int *) malloc(g->N_vertex * sizeof(int));
+    printf("\nresult with min heap\n");
+    single_source_dijkstra_min_heap(g,0, dist_min_heap, prev_min_heap);
 
 
     
