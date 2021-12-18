@@ -49,6 +49,7 @@ void single_source_dijkstra(M_Graph* g, int src, double* dist, int* prev){
             }
         }
     }
+    
     printf("\ndijkstra(%s): \n", g->Names[src]);
     for(i = 0; i < g->N_vertex; i++){
         int temp = i;
@@ -67,7 +68,6 @@ void single_source_dijkstra(M_Graph* g, int src, double* dist, int* prev){
             printf("\n");
         }
     }
-
 }
 
 void single_source_dijkstra_min_heap(M_Graph* g, int src, double* dist, int* prev){
@@ -103,6 +103,7 @@ void single_source_dijkstra_min_heap(M_Graph* g, int src, double* dist, int* pre
                 for (int i = 0; i < heap->index; i++) {
                 printf("\t%d\t%s\t%.3f\n", heap->nodes[i].index, g->Names[heap->nodes[i].index], heap->nodes[i].weight);
             }
+            print_heap(heap);
         }
         node u = ExtractMin(heap);
         if(DEBUG) {
@@ -116,22 +117,26 @@ void single_source_dijkstra_min_heap(M_Graph* g, int src, double* dist, int* pre
                 v.index = i;
                 v.weight = dist[i];
                 if(DEBUG) {
-                    printf("\t\tExaminating the edge %s->%s and the weight is\t%.3f\n", g->Names[u.index], g->Names[v.index], g->weights[u.index][v.index]);
+                    printf("\t\tExaminating the edge %s->%s and the weight is\t%.3f\n\n", g->Names[u.index], g->Names[v.index], g->weights[u.index][v.index]);
                 }
                 double temp = dist[u.index] + g->weights[u.index][v.index];
                 if(temp < dist[v.index]){
                     dist[v.index] = temp;
                     prev[v.index] = u.index;
                     DecreaseKey(heap, v.index, temp);
+                    if(DEBUG) {
+                        printf("\t\tAdjacent node %s\t has the weight\t%.3f and his previous node is %s\n\n", g->Names[v.index], dist[v.index], g->Names[u.index]);
+                    }
                 }
                    
             }
             
         }
         if(DEBUG) {
-            printf("\tAfter relaxation the node %s minimum weight is\t%.3f\n", g->Names[u.index], dist[u.index]);
+            printf("\tAfter relaxation the node %s minimum weight is\t%.3f\n\n", g->Names[u.index], dist[u.index]);
         }
     }
+    /*
     printf("\ndijkstra(%s): \n", g->Names[src]);
     for(int i = 0; i < g->N_vertex; i++){
         int temp = i;
@@ -150,4 +155,5 @@ void single_source_dijkstra_min_heap(M_Graph* g, int src, double* dist, int* pre
             printf("\n");
         }
     }
+    */
 }

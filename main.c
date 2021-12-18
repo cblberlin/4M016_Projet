@@ -2,10 +2,12 @@
 #include "min_heap.h"
 #include "Dijkstra.h"
 #include "osm_parser.h"
+#include "utilities.h"
 
 
 int main(){
 
+    /*
     int n, e;
     double max_weight;
     printf("Enter the number of vertex: ");
@@ -25,14 +27,19 @@ int main(){
     double* dist = (double *) malloc(g->N_vertex * sizeof(double));
     int* prev = (int *) malloc(g->N_vertex * sizeof(int));
     printf("\nresult without min heap\n");
-    single_source_dijkstra(g, 0, dist, prev);
+    int src;
+    printf("Enter the index of starting point (from 0 to number of vertices - 1):\n");
+    scanf("%d", &src);
+    single_source_dijkstra(g, src, dist, prev);
     
     double* dist_min_heap = (double *) malloc(g->N_vertex * sizeof(double));
     int* prev_min_heap = (int *) malloc(g->N_vertex * sizeof(int));
     printf("\nresult with min heap\n");
-    single_source_dijkstra_min_heap(g,0, dist_min_heap, prev_min_heap);
+    single_source_dijkstra_min_heap(g,src, dist_min_heap, prev_min_heap);
 
-
-    
+    Dijkstra_resultat_compare(g, src, dist, prev, dist_min_heap, prev_min_heap);
+    */
+    int n = 15;
+    test_heap(n);
     return 0;
 }

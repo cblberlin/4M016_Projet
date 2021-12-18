@@ -8,6 +8,7 @@
 
 #include <stdbool.h>
 #include "M_Graph.h"
+#include "utilities.h"
 
 /*
 quick define left(right) child and parent node function
@@ -26,13 +27,12 @@ typedef struct node_{
     tail is the position of the next item can be inserted, ex: 
     min heap
     size = 6
-    nodes
+    nodes =
     x0     x1     x2     x3      x4
     0      1      2      3       4
-    -1     -1     -1     -3      -4 
     wo     w1     w2     w3      w4
-    then the tail will be 5, so the maximum value of tail is size - 1
-    data is the array of node with size n
+    then the index of next node inserted will be 5, the maximum value of tail is size - 1
+    nodes is the array of node with size n
 */
 typedef struct min_heap_{
     node* nodes;
@@ -59,5 +59,9 @@ void DecreaseKey(min_heap* heap, int i, double val);
 node ExtractMin(min_heap* h);
 
 int* index_heap(min_heap* h);
+
+void print_heap(min_heap* heap);
+
+void test_heap(int n);
 
 #endif
