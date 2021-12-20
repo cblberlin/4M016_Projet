@@ -6,7 +6,6 @@
 
 
 int main(){
-
     /*
     int n, e;
     double max_weight;
@@ -36,10 +35,19 @@ int main(){
     int* prev_min_heap = (int *) malloc(g->N_vertex * sizeof(int));
     printf("\nresult with min heap\n");
     single_source_dijkstra_min_heap(g,src, dist_min_heap, prev_min_heap);
-
+    
     Dijkstra_resultat_compare(g, src, dist, prev, dist_min_heap, prev_min_heap);
+    
+    
+    free(dist);
+    free(dist_min_heap);
+    free(prev);
+    free(prev_min_heap);
     */
+    
+    
     int n = 15;
     test_heap(n);
+    
     return 0;
 }
