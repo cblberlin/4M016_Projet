@@ -41,6 +41,7 @@ void Dijkstra_resultat_compare(M_Graph* g, int src, double* dist1, int* prev1, d
         bool arrived1 = (temp == src);
         bool arrived2 = (temp == src);
         printf("shortest(%s, %s)=%f\tshortest(%s, %s)=%f\n", g->Names[src], g->Names[i], dist1[i], g->Names[src], g->Names[i], dist2[i]);
+        
         if(temp == src){
             printf("the path is %s -> %s\n", g->Names[src], g->Names[temp]);
             printf("the path is %s -> %s\n", g->Names[src], g->Names[temp]);

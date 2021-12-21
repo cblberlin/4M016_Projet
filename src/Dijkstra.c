@@ -86,6 +86,7 @@ void single_source_dijkstra_min_heap(M_Graph* g, int src, double* dist, int* pre
         flag[i] = false;
     }
     dist[src] = 0.;
+    prev[src] = src;
     
     // Enqueue all the nodes
     for(int i = 0; i < g->N_vertex; i++){
@@ -95,7 +96,22 @@ void single_source_dijkstra_min_heap(M_Graph* g, int src, double* dist, int* pre
         Insert(heap, x);
     }
 
-    //print_heap(heap);
+    if(DEBUG){
+        printf("        ");
+        for(int i = 0; i < g->N_vertex; i++){
+            printf("%s\t ", g->Names[i]);
+        }
+        printf("\nDist is");
+        for(int i = 0; i < g->N_vertex; i++){
+            printf(" %.3f\t", dist[i]);
+        }
+        printf("\n");
+        printf("Prev is");
+        for(int i = 0; i < g->N_vertex; i++){
+            printf(" %d\t", prev[i]);
+        }
+        printf("\n");
+    }
     
     while(!heap_empty(heap)){
         if(DEBUG) {
@@ -107,7 +123,7 @@ void single_source_dijkstra_min_heap(M_Graph* g, int src, double* dist, int* pre
         }
         node u = ExtractMin(heap);
         if(DEBUG) {
-            printf("\t -> Exploration in %s.\n", g->Names[u.index]);
+            printf("\t -> Exploration in %s, and his weight is %.3f\n", g->Names[u.index], dist[u.index]);
         }
         flag[u.index] = true;
         //int* index = index_heap(heap);
@@ -137,6 +153,23 @@ void single_source_dijkstra_min_heap(M_Graph* g, int src, double* dist, int* pre
                    
             }
             
+        }
+
+        if(DEBUG){
+            printf("        ");
+            for(int i = 0; i < g->N_vertex; i++){
+                printf("%s\t ", g->Names[i]);
+            }
+            printf("\nDist is");
+            for(int i = 0; i < g->N_vertex; i++){
+                printf(" %.3f\t", dist[i]);
+            }
+            printf("\n");
+            printf("Prev is");
+            for(int i = 0; i < g->N_vertex; i++){
+                printf(" %d\t", prev[i]);
+            }
+            printf("\n");
         }
     }
 

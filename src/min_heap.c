@@ -66,10 +66,11 @@ void Insert(min_heap *h, node x) {
 }
 
 void DecreaseKey(min_heap* h, int i, double val){
-    if(val > h->nodes[i].weight){
+    if(val >= h->nodes[i].weight){
         return;
     }
     h->nodes[i].weight = val;
+    /*
     while (i > 0){
         if(h->nodes[i].weight < h->nodes[PARENT(i)].weight){
             swap(&h->nodes[i], &h->nodes[PARENT(i)]);
@@ -77,7 +78,8 @@ void DecreaseKey(min_heap* h, int i, double val){
         }else{
             break;
         }
-    }
+    }*/
+    heapify(h, i);
 }
 
 node ExtractMin(min_heap* h){
@@ -89,7 +91,7 @@ node ExtractMin(min_heap* h){
     root = h->nodes[0];
     h->nodes[0] = h->nodes[h->index - 1];
     h->index--;
-    h->nodes = realloc(h->nodes, h->index * sizeof(node));
+    //h->nodes = realloc(h->nodes, h->index * sizeof(node));
     heapify(h, 0);
     return root;
 }
@@ -126,6 +128,7 @@ void test_heap(int n){
     swap(&x, &y);
     printf("\tAfter swap: x.index = %d x.weight = %.3f, y.index = %d y.weight = %.3f\n", x.index, x.weight, y.index, y.weight);
 
+    printf("\nTest Insert\n");
     min_heap* h = init_heap(n);
     double r;
     srand(time(NULL));
@@ -142,6 +145,7 @@ void test_heap(int n){
     }
     print_heap(h);
 
+    printf("\nTest ExtractMin\n");
     while(!heap_empty(h)){
         node u = ExtractMin(h);
         printf("\t -> Exploration in %d %s.\n", u.index, int2char(u.index));
@@ -149,6 +153,31 @@ void test_heap(int n){
         for (int i = 0; i < h->index; i++) {
             printf("\t%d\t%s\t%.3f\n", h->nodes[i].index, int2char(h->nodes[i].index), h->nodes[i].weight);
         }
+        printf("\n");
+        print_heap(h);
+        printf("\n");
+    }
+
+    printf("\nTest DecreaseKey\n");
+    printf("\nInitialisation of heap\n");
+    for(int i = 0; i < n; i++){
+        node x;
+        x.index = i;
+        r = (double)rand() / RAND_MAX * n;
+        x.weight = r;
+        Insert(h, x);
+    }
+    print_heap(h);
+    while(!heap_empty(h)){
+        node u = ExtractMin(h);
+        printf("\t -> Exploration in %d %s.\n", u.index, int2char(u.index));
+        //printf("\t -> Exploration in %d.\n", u.index);
+        for (int i = 0; i < h->index; i++) {
+            printf("\t%d\t%s\t%.3f\n", h->nodes[i].index, int2char(h->nodes[i].index), h->nodes[i].weight);
+        }
+        r = (double) rand() / RAND_MAX * n;
+        printf("\n r = %.3f\n", r);
+        DecreaseKey(h, h->index - 1, r);
         printf("\n");
         print_heap(h);
         printf("\n");

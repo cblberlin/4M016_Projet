@@ -6,7 +6,7 @@
 
 
 int main(){
-    /*
+    
     int n, e;
     double max_weight;
     printf("Enter the number of vertex: ");
@@ -20,9 +20,9 @@ int main(){
     g = init_graph(n);
     //printf("test\n");
     g = create_graph_random(g, n, e, max_weight);
-    //printf("The adjacency matrix of graph is: \n");
+    printf("The adjacency matrix of graph is: \n");
 
-    //print_graph(g);
+    print_graph(g);
     double* dist = (double *) malloc(g->N_vertex * sizeof(double));
     int* prev = (int *) malloc(g->N_vertex * sizeof(int));
     printf("\nresult without min heap\n");
@@ -38,16 +38,16 @@ int main(){
     
     Dijkstra_resultat_compare(g, src, dist, prev, dist_min_heap, prev_min_heap);
     
-    
+    /*
     free(dist);
     free(dist_min_heap);
     free(prev);
     free(prev_min_heap);
     */
     
-    
+    /*
     int n = 15;
     test_heap(n);
-    
+    */
     return 0;
 }
