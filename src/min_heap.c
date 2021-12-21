@@ -70,7 +70,7 @@ void DecreaseKey(min_heap* h, int i, double val){
         return;
     }
     h->nodes[i].weight = val;
-    /*
+    
     while (i > 0){
         if(h->nodes[i].weight < h->nodes[PARENT(i)].weight){
             swap(&h->nodes[i], &h->nodes[PARENT(i)]);
@@ -78,8 +78,8 @@ void DecreaseKey(min_heap* h, int i, double val){
         }else{
             break;
         }
-    }*/
-    heapify(h, i);
+    }
+    //heapify(h, i);
 }
 
 node ExtractMin(min_heap* h){
