@@ -93,7 +93,7 @@ void print_graph(M_Graph *g){
         for(int j = 0; j < g->N_vertex; j++){
             printf("%.3f\t", g->weights[i][j]);
         }
-        printf("\n");
+        printf("\n\n");
     }
 }
 

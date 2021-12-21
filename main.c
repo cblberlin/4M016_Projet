@@ -7,7 +7,7 @@
 
 int main(){
     
-    /*
+    
     int n, e;
     
     double max_weight;
@@ -21,12 +21,12 @@ int main(){
     M_Graph* g = (M_Graph*) malloc(sizeof(M_Graph));
     g = init_graph(n);
     g = create_graph_random(g, n, e, max_weight);
-    */
     
+    
+    /*
     M_Graph* g = (M_Graph*) malloc(sizeof(M_Graph));
     int n = 16;
     g = init_graph(n);
-    //g = create_graph_random(g, n, e, max_weight);
     
     add_Edge(g, 0, 2, 5.); add_Edge(g, 2, 0, 5.);
     add_Edge(g, 1, 5, 2.); add_Edge(g, 5, 1, 2.);
@@ -48,10 +48,10 @@ int main(){
     add_Edge(g, 14, 15, 3.); add_Edge(g, 15, 14, 3.);
     add_Edge(g, 15, 8, 1.); add_Edge(g, 8, 15, 1.);
     add_Edge(g, 15, 9, 2.); add_Edge(g, 9, 15, 2.);
-    
-    printf("The adjacency matrix of graph is: \n");
+    */
+    //printf("The adjacency matrix of graph is: \n");
 
-    print_graph(g);
+    //print_graph(g);
     double* dist = (double *) malloc(g->N_vertex * sizeof(double));
     int* prev = (int *) malloc(g->N_vertex * sizeof(int));
     printf("\nresult without min heap\n");
@@ -65,8 +65,9 @@ int main(){
     printf("\nresult with min heap\n");
     single_source_dijkstra_min_heap(g,src, dist_min_heap, prev_min_heap);
     
-    Dijkstra_resultat_compare(g, src, dist, prev, dist_min_heap, prev_min_heap);
+    //Dijkstra_resultat_compare(g, src, dist, prev, dist_min_heap, prev_min_heap);
     
+
     /*
     free(dist);
     free(dist_min_heap);

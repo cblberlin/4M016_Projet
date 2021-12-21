@@ -128,6 +128,15 @@ void test_heap(int n){
     swap(&x, &y);
     printf("\tAfter swap: x.index = %d x.weight = %.3f, y.index = %d y.weight = %.3f\n", x.index, x.weight, y.index, y.weight);
 
+    min_heap* h2 = init_heap(n);
+    printf("Test heap empty");
+    Insert(h2, x);
+    if(heap_empty(h2)){
+        printf("heap is empty");
+    }else{
+        printf("heap is not empty");
+    }
+
     printf("\nTest Insert\n");
     min_heap* h = init_heap(n);
     double r;

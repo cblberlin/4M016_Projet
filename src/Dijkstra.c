@@ -3,7 +3,7 @@
 #include "Dijkstra.h"
 #include "min_heap.h"
 
-#define DEBUG 1
+#define DEBUG 0
 
 /*
 with given single source vertex and single destination vertex,
@@ -71,110 +71,57 @@ void single_source_dijkstra(M_Graph* g, int src, double* dist, int* prev){
 }
 
 void single_source_dijkstra_min_heap(M_Graph* g, int src, double* dist, int* prev){
-    min_heap* heap = init_heap(g->N_vertex);
-    if(DEBUG){
-        printf("The min heap has been succefully allocated\n");
-        printf("The capacity of the min heap is %d\n", heap->capacity);
-        printf("The current index of the min heap is %d\n", heap->index);
-        //printf("The first node of the min heap is %.3f\n", heap->weights[0]);
+    // initialisation of min heap
+    min_heap* h = malloc(sizeof(min_heap));
+    h = init_heap(g->N_vertex);
 
-    }
-    bool* flag = (bool *) malloc(sizeof(bool) * g->N_vertex);
+    // initialisation of array of distance and array of previous node
+    // initialise dist as all node have distance infinity except the starting point src is 0.
+    // initialise prev as all node have prev node -1 except the starting point src is 0;
+    
     for(int i = 0; i < g->N_vertex; i++){
-        prev[i] = -1;
         dist[i] = INFINITY;
-        flag[i] = false;
-    }
-    dist[src] = 0.;
-    prev[src] = src;
-    
-    // Enqueue all the nodes
-    for(int i = 0; i < g->N_vertex; i++){
-        node x;
-        x.index = i;
-        x.weight = dist[i];
-        Insert(heap, x);
+        prev[i] = -1;
     }
 
-    if(DEBUG){
-        printf("        ");
-        for(int i = 0; i < g->N_vertex; i++){
-            printf("%s\t ", g->Names[i]);
-        }
-        printf("\nDist is");
-        for(int i = 0; i < g->N_vertex; i++){
-            printf(" %.3f\t", dist[i]);
-        }
-        printf("\n");
-        printf("Prev is");
-        for(int i = 0; i < g->N_vertex; i++){
-            printf(" %d\t", prev[i]);
-        }
-        printf("\n");
-    }
-    
-    while(!heap_empty(heap)){
-        if(DEBUG) {
-            printf("\tIndex\tNode\tDist\n");
-                for (int i = 0; i < heap->index; i++) {
-                printf("\t%d\t%s\t%.3f\n", heap->nodes[i].index, g->Names[heap->nodes[i].index], heap->nodes[i].weight);
-            }
-            print_heap(heap);
-        }
-        node u = ExtractMin(heap);
-        if(DEBUG) {
-            printf("\t -> Exploration in %s, and his weight is %.3f\n", g->Names[u.index], dist[u.index]);
-        }
-        flag[u.index] = true;
-        //int* index = index_heap(heap);
-        for(int i = 0; i < g->N_vertex; i++){
-            // for all node that's ajacent with u and still in min heap
-            if(g->weights[u.index][i] < INFINITY && i != u.index && flag[i] == false){
-                /*
-                node v;
-                v.index = i;
-                v.weight = dist[i];
-                */
-                if(DEBUG) {
-                    printf("\t\tExaminating the edge %s->%s and the weight is\t%.3f\n\n", g->Names[u.index], g->Names[i], g->weights[u.index][i]);
-                }
-                double temp = dist[u.index] + g->weights[u.index][i];
-                if(temp < dist[i]){
-                    if(DEBUG) {
-                        printf("\t\tBefore update the adjacent node %s has the weight %.3f and his previous node is %s\n", g->Names[i], dist[i], g->Names[prev[i]]);
-                    }
-                    dist[i] = temp;
-                    prev[i] = u.index;
-                    DecreaseKey(heap, i, dist[i]);
-                    if(DEBUG) {
-                        printf("\t\tAfter update the adjacent node %s has the weight %.3f and his previous node is %s\n\n", g->Names[i], dist[i], g->Names[prev[i]]);
+    // Insert the first node src in the heap
+    node s;
+    s.index = src;
+    s.weight = 0.;
+    Insert(h, s);
+    //print_heap(h);
+    while (!heap_empty(h))
+    {
+        // delete the min node on the heap
+        node u = ExtractMin(h);
+        //printf("\n%s has been extracted, current weight is %.3f, in array dist the value is %.3f\n", g->Names[u.index], u.weight, dist[u.index]);
+        if(u.weight <= dist[u.index])
+        {
+            dist[u.index] = u.weight;
+
+            // for all node v who has edge from u to v, and v is still not visited yet
+            // here we suppose our graph is undirected
+            for(int i = 0; i < g->N_vertex; i++)
+            {
+                if(g->weights[u.index][i] < INFINITY && u.index != i)
+                {
+                    if(dist[u.index] + g->weights[u.index][i] < dist[i])
+                    {
+                        node v;
+                        v.index = i;
+                        v.weight = dist[u.index] + g->weights[u.index][i];
+                        Insert(h, v);
+                        //printf("%s has been inserted to heap, the weight is %.3f.\n", g->Names[i], dist[i]);
+                        //print_heap(h);
+                        dist[i] = dist[u.index] + g->weights[u.index][i];
+                        prev[i] = u.index;
+                        //printf("%s has been inserted to heap, the weight is %.3f.\n\n", g->Names[i], dist[i]);
+                        //print_heap(h);
                     }
                 }
-                   
             }
-            
-        }
-
-        if(DEBUG){
-            printf("        ");
-            for(int i = 0; i < g->N_vertex; i++){
-                printf("%s\t ", g->Names[i]);
-            }
-            printf("\nDist is");
-            for(int i = 0; i < g->N_vertex; i++){
-                printf(" %.3f\t", dist[i]);
-            }
-            printf("\n");
-            printf("Prev is");
-            for(int i = 0; i < g->N_vertex; i++){
-                printf(" %d\t", prev[i]);
-            }
-            printf("\n");
         }
     }
-
-    free_heap(heap);
-
     
     printf("\ndijkstra(%s): \n", g->Names[src]);
     for(int i = 0; i < g->N_vertex; i++){
