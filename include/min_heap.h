@@ -62,6 +62,5 @@ int* index_heap(min_heap* h);
 
 void print_heap(min_heap* heap);
 
-void test_heap(int n);
 
 #endif

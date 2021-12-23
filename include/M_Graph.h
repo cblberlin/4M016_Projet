@@ -9,10 +9,6 @@
 
 #endif
 
-#define MAX_WEIGHT 10.
-
-#define LENGTH()
-
 typedef struct M_Graph_{
     char** Names;       // the array of characters which represente the name of each vertex;
     int N_vertex;       // the number of vertex

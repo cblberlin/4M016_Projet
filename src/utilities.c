@@ -38,17 +38,18 @@ void Dijkstra_resultat_compare(M_Graph* g, int src, double* dist1, int* prev1, d
     printf("\ndijkstra without min heap(%s): \t dijkstra min heap(%s)\n", g->Names[src], g->Names[src]);
     for(int i = 0; i < g->N_vertex; i++){
         int temp = i;
+        int temp2 = i;
         bool arrived1 = (temp == src);
-        bool arrived2 = (temp == src);
+        bool arrived2 = (temp2 == src);
         printf("shortest(%s, %s)=%f\tshortest(%s, %s)=%f\n", g->Names[src], g->Names[i], dist1[i], g->Names[src], g->Names[i], dist2[i]);
         
         if(temp == src){
-            printf("the path is %s -> %s\n", g->Names[src], g->Names[temp]);
-            printf("the path is %s -> %s\n", g->Names[src], g->Names[temp]);
+            printf("the path is %s <- %s\n", g->Names[src], g->Names[temp]);
+            printf("the path is %s <- %s\n", g->Names[src], g->Names[temp2]);
         }else{
             printf("the path is\t");
             while(!arrived1){
-                printf("%s -> %s\t", g->Names[temp], g->Names[prev1[temp]]);
+                printf("%s <- %s\t", g->Names[temp], g->Names[prev1[temp]]);
                 temp = prev1[temp];
                 arrived1 = (temp == src);
                 //printf("\n");
@@ -56,9 +57,9 @@ void Dijkstra_resultat_compare(M_Graph* g, int src, double* dist1, int* prev1, d
             printf("\n");
             printf("the path is\t");
             while(!arrived2){
-                printf("%s -> %s\t", g->Names[temp], g->Names[prev2[temp]]);
-                temp = prev2[temp];
-                arrived2 = (temp == src);
+                printf("%s <- %s\t", g->Names[temp2], g->Names[prev2[temp2]]);
+                temp2 = prev2[temp2];
+                arrived2 = (temp2 == src);
                 //printf("\n");
             }
             printf("\n");

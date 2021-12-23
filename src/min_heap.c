@@ -16,7 +16,7 @@ min_heap* init_heap(int Max_capacity){
     min_heap* h = (min_heap *) malloc(sizeof(min_heap));
     h->index = 0;
     h->capacity = Max_capacity;
-    h->nodes = (node *) malloc(Max_capacity * sizeof(node));
+    h->nodes = (node *) malloc(sizeof(node));
     return h;
 }
 
@@ -53,10 +53,13 @@ void heapify(min_heap*h, int i){
 
 void Insert(min_heap *h, node x) {
     if(h->index == h->capacity){
-        printf("heap overflowed !\n");
+        printf("heap overflowed when inserting the node %d!\n", x.index);
+        printf("heap index is %d and the capacity is %d\n", h->index, h->capacity);
         return;
     }
     h->index++;
+    h->nodes = realloc(h->nodes, h->index * sizeof(node));
+    h->capacity *= 2;
     int i = h->index - 1;
     h->nodes[i] = x;
     while (i != 0 && h->nodes[PARENT(i)].weight > h->nodes[i].weight){
@@ -89,7 +92,8 @@ node ExtractMin(min_heap* h){
     }
     // Store the minimum value, and remove it from heap
     root = h->nodes[0];
-    h->nodes[0] = h->nodes[h->index - 1];
+    //h->nodes[0] = h->nodes[h->index - 1];
+    swap(&h->nodes[0], &h->nodes[h->index - 1]);
     h->index--;
     //h->nodes = realloc(h->nodes, h->index * sizeof(node));
     heapify(h, 0);
@@ -114,82 +118,4 @@ void print_heap(min_heap* heap){
 		}
 		printf("\n");
 	}
-}
-
-void test_heap(int n){
-    printf("\nTest swap\n");
-    node x, y;
-    x.index = 0;
-    x.weight = 1.;
-    y.index = 1;
-    y.weight = 2.;
-
-    printf("\tBefore swap: x.index = %d x.weight = %.3f, y.index = %d y.weight = %.3f\n", x.index, x.weight, y.index, y.weight);
-    swap(&x, &y);
-    printf("\tAfter swap: x.index = %d x.weight = %.3f, y.index = %d y.weight = %.3f\n", x.index, x.weight, y.index, y.weight);
-
-    min_heap* h2 = init_heap(n);
-    printf("Test heap empty");
-    Insert(h2, x);
-    if(heap_empty(h2)){
-        printf("heap is empty");
-    }else{
-        printf("heap is not empty");
-    }
-
-    printf("\nTest Insert\n");
-    min_heap* h = init_heap(n);
-    double r;
-    srand(time(NULL));
-    for(int i = 0; i < n; i++){
-        node x;
-        x.index = i;
-        r = (double)rand() / RAND_MAX * n;
-        x.weight = r;
-        Insert(h, x);
-    }
-    printf("\tIndex\tNode\tDist\n");
-    for (int i = 0; i < h->index; i++) {
-        printf("\t%d\t%s\t%.3f\n", h->nodes[i].index, int2char(h->nodes[i].index), h->nodes[i].weight);
-    }
-    print_heap(h);
-
-    printf("\nTest ExtractMin\n");
-    while(!heap_empty(h)){
-        node u = ExtractMin(h);
-        printf("\t -> Exploration in %d %s.\n", u.index, int2char(u.index));
-        //printf("\t -> Exploration in %d.\n", u.index);
-        for (int i = 0; i < h->index; i++) {
-            printf("\t%d\t%s\t%.3f\n", h->nodes[i].index, int2char(h->nodes[i].index), h->nodes[i].weight);
-        }
-        printf("\n");
-        print_heap(h);
-        printf("\n");
-    }
-
-    printf("\nTest DecreaseKey\n");
-    printf("\nInitialisation of heap\n");
-    for(int i = 0; i < n; i++){
-        node x;
-        x.index = i;
-        r = (double)rand() / RAND_MAX * n;
-        x.weight = r;
-        Insert(h, x);
-    }
-    print_heap(h);
-    while(!heap_empty(h)){
-        node u = ExtractMin(h);
-        printf("\t -> Exploration in %d %s.\n", u.index, int2char(u.index));
-        //printf("\t -> Exploration in %d.\n", u.index);
-        for (int i = 0; i < h->index; i++) {
-            printf("\t%d\t%s\t%.3f\n", h->nodes[i].index, int2char(h->nodes[i].index), h->nodes[i].weight);
-        }
-        r = (double) rand() / RAND_MAX * n;
-        printf("\n r = %.3f\n", r);
-        DecreaseKey(h, h->index - 1, r);
-        printf("\n");
-        print_heap(h);
-        printf("\n");
-    }
-    //free_heap(h);
 }

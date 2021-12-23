@@ -1,4 +1,5 @@
 #include "M_Graph.h"
+#include "L_Graph.h"
 #include "min_heap.h"
 #include "Dijkstra.h"
 #include "osm_parser.h"
@@ -7,7 +8,7 @@
 
 int main(){
     
-    
+    /*
     int n, e;
     
     double max_weight;
@@ -18,10 +19,13 @@ int main(){
 
     printf("Enter the max weight of edge: ");
     scanf("%lf", &max_weight);
+    */
+
+    /*
     M_Graph* g = (M_Graph*) malloc(sizeof(M_Graph));
     g = init_graph(n);
     g = create_graph_random(g, n, e, max_weight);
-    
+    */
     
     /*
     M_Graph* g = (M_Graph*) malloc(sizeof(M_Graph));
@@ -52,6 +56,8 @@ int main(){
     //printf("The adjacency matrix of graph is: \n");
 
     //print_graph(g);
+
+    /*
     double* dist = (double *) malloc(g->N_vertex * sizeof(double));
     int* prev = (int *) malloc(g->N_vertex * sizeof(int));
     printf("\nresult without min heap\n");
@@ -65,8 +71,8 @@ int main(){
     printf("\nresult with min heap\n");
     single_source_dijkstra_min_heap(g,src, dist_min_heap, prev_min_heap);
     
-    //Dijkstra_resultat_compare(g, src, dist, prev, dist_min_heap, prev_min_heap);
-    
+    Dijkstra_resultat_compare(g, src, dist, prev, dist_min_heap, prev_min_heap);
+    */
 
     /*
     free(dist);
@@ -79,5 +85,40 @@ int main(){
     int n = 15;
     test_heap(n);
     */
+
+    printf("test adjacency list\n");
+    L_Graph* g = (L_Graph *) malloc(sizeof(L_Graph *));
+    Create_L_Graph(g, 16);
+    //create_L_graph_random(g, n, e, max_weight);
+    
+    addEdge(g, 0, 2, 5.); addEdge(g, 2, 0, 5.);
+    addEdge(g, 1, 5, 2.); addEdge(g, 5, 1, 2.);
+    addEdge(g, 1, 4, 3.); addEdge(g, 4, 1, 3.);
+    addEdge(g, 1, 3, 4.); addEdge(g, 3, 1, 4.);
+    addEdge(g, 1, 7, 5.); addEdge(g, 7, 1, 5.);
+    addEdge(g, 4, 5, 1.); addEdge(g, 5, 4, 1.);
+    addEdge(g, 4, 7, 2.); addEdge(g, 7, 4, 2.);
+    addEdge(g, 4, 8, 7.); addEdge(g, 8, 4, 7.);
+    addEdge(g, 3, 8, 16.); addEdge(g, 8, 3, 16.);
+    addEdge(g, 2, 3, 11.); addEdge(g, 3, 2, 11.);
+    addEdge(g, 2, 5, 2.); addEdge(g, 5, 2, 2.);
+    addEdge(g, 2, 6, 3.); addEdge(g, 6, 2, 3.);
+    addEdge(g, 2, 14, 5.); addEdge(g, 14, 2, 5.);
+    addEdge(g, 10, 11, 10.); addEdge(g, 11, 10, 10.);
+    addEdge(g, 11, 12, 2.); addEdge(g, 12, 11, 2.);
+    addEdge(g, 12, 13, 3.); addEdge(g, 13, 12, 3.);
+    addEdge(g, 13, 14, 2.); addEdge(g, 14, 13, 2.);
+    addEdge(g, 14, 15, 3.); addEdge(g, 15, 14, 3.);
+    addEdge(g, 15, 8, 1.); addEdge(g, 8, 15, 1.);
+    addEdge(g, 15, 9, 2.); addEdge(g, 9, 15, 2.);
+    
+    
+    printGraph(g);
+
+    double* dist = (double *) malloc(g->N_vertex * sizeof(double));
+    int* prev = (int *) malloc(g->N_vertex * sizeof(int));
+
+    single_source_dijkstra_adj_list_min_heap(g, 0, dist, prev);
+
     return 0;
 }
