@@ -16,7 +16,7 @@ min_heap* init_heap(int Max_capacity){
     min_heap* h = (min_heap *) malloc(sizeof(min_heap));
     h->index = 0;
     h->capacity = Max_capacity;
-    h->nodes = (node *) malloc(sizeof(node));
+    h->nodes = (node *) malloc(Max_capacity * sizeof(node));
     return h;
 }
 
@@ -53,8 +53,7 @@ void heapify(min_heap*h, int i){
 
 void Insert(min_heap *h, node x) {
     if(h->index == h->capacity){
-        printf("heap overflowed when inserting the node %d!\n", x.index);
-        printf("heap index is %d and the capacity is %d\n", h->index, h->capacity);
+        printf("heap overflowed !\n");
         return;
     }
     h->index++;
@@ -92,8 +91,7 @@ node ExtractMin(min_heap* h){
     }
     // Store the minimum value, and remove it from heap
     root = h->nodes[0];
-    //h->nodes[0] = h->nodes[h->index - 1];
-    swap(&h->nodes[0], &h->nodes[h->index - 1]);
+    h->nodes[0] = h->nodes[h->index - 1];
     h->index--;
     //h->nodes = realloc(h->nodes, h->index * sizeof(node));
     heapify(h, 0);
@@ -118,4 +116,19 @@ void print_heap(min_heap* heap){
 		}
 		printf("\n");
 	}
+}
+
+/*
+    check if index i in the heap or not
+*/
+bool is_in_heap(min_heap* h, int i)
+{
+    for(int i = 0; i < h->index; i++)
+    {
+        if(i == h->nodes->index)
+        {
+            return true;
+        }
+    }
+    return false;
 }

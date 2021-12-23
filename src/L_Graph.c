@@ -25,6 +25,35 @@ void Create_L_Graph(L_Graph* g, int n)
         g->Names[i] = int2char(i);
     }
 }
+
+/*
+    destroy L_graph
+*/
+void free_L_Graph(L_Graph* g)
+{
+    if(g != NULL)
+    {
+        if(g->adjacency_list_array != NULL)
+        {
+            for(int i = 0; i < g->N_vertex; i++)
+            {
+                adjacency_list_node* item = g->adjacency_list_array[i].head;
+
+                while (item != NULL)
+                {
+                    adjacency_list_node* temp = item->next;
+                    free(item);
+                    item = temp;
+                }
+                
+            }
+        }
+
+        free(g->adjacency_list_array);
+        free(g);
+    }
+}
+
 /*
     add an edge to graph, here we suppose that our graph is undirected
 */
@@ -59,6 +88,9 @@ void printNode(L_Graph* g, int n)
     
 }
 
+/*
+    print graph in terminal using linked list form
+*/
 void printGraph(L_Graph* g) 
 {
   for (int i = 0; i < g->N_vertex; i++) 
@@ -67,6 +99,9 @@ void printGraph(L_Graph* g)
   }
 }
 
+/*
+    create graph using linked list
+*/
 void create_L_graph_random(L_Graph* g, int n, int e, double max_weight)
 {
     assert(e <= n * (n - 1));

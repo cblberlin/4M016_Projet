@@ -88,7 +88,6 @@ void single_source_dijkstra_min_heap(M_Graph* g, int src, double* dist, int* pre
                 {
                     if(dist[u.index] + g->weights[u.index][i] < dist[i])
                     {
-                        // Insert node v to heap if d[u] + w(u, v) < d[v]
                         node v;
                         v.index = i;
                         v.weight = dist[u.index] + g->weights[u.index][i];
@@ -113,27 +112,22 @@ void single_source_dijkstra_adj_list(L_Graph* g, int src, double* dist, int* pre
     double temp;
     int* flag = (int *) malloc(sizeof(int) * g->N_vertex);
 
-    //dist = malloc(sizeof(double) * g->N_vertex);
-    //prev = malloc(sizeof(int) * g->N_vertex);
     for(i = 0; i < g->N_vertex; i++){
-        //printf("test1\n");
         flag[i] = 0;
         prev[i] = 0;
         dist[i] = get_weight(g, src, i);
     }
-    //printf("test1\n");
+
+
     flag[src] = 1;
     dist[src] = 0;
-    //printf("test1\n");
+
     for(i = 0; i < g->N_vertex; i++){
         min = INFINITY;
         for(j = 0; j < g->N_vertex; j++){
-            //printf("%d\n", flag[i]);
             if(flag[j] == 0 && dist[j] < min){
-                //printf("test1\n");
                 min = dist[j];
                 k = j;
-                //printf("test1\n");
             }
         }
         flag[k] = 1;
@@ -145,24 +139,6 @@ void single_source_dijkstra_adj_list(L_Graph* g, int src, double* dist, int* pre
                 dist[j] = temp;
                 prev[j] = k;
             }
-        }
-    }
-
-    printf("\ndijkstra without min heap(%s):\n", g->Names[src]);
-    for(int i = 0; i < g->N_vertex; i++){
-        int temp = i;
-        bool arrived1 = (temp == src);
-        printf("shortest(%s, %s)=%f\n", g->Names[src], g->Names[i], dist[i]);
-        
-        if(temp == src){
-            printf("the path is %s <- %s\n", g->Names[src], g->Names[temp]);
-            while(!arrived1){
-                printf("%s <- %s\t", g->Names[temp], g->Names[prev[temp]]);
-                temp = prev[temp];
-                arrived1 = (temp == src);
-                //printf("\n");
-            }
-            printf("\n\n");
         }
     }
 }
@@ -186,7 +162,7 @@ void single_source_dijkstra_adj_list_min_heap(L_Graph* g, int src, double* dist,
     s.index = src;
     s.weight = 0.;
     Insert(h, s);
-    //print_heap(h);
+    
     while (!heap_empty(h))
     {
         // delete the min node on the heap
@@ -198,45 +174,32 @@ void single_source_dijkstra_adj_list_min_heap(L_Graph* g, int src, double* dist,
 
             // for all node v who has edge from u to v, and v is still not visited yet
             // here we suppose our graph is undirected
-            for(int i = 0; i < g->N_vertex; i++)
-            {
-                double w = get_weight(g, u.index, i);
-                if(w < INFINITY && u.index != i)
-                {
-                    if(dist[u.index] + w < dist[i])
-                    {
-                        // Insert node v to heap if d[u] + w(u, v) < d[v]
-                        node v;
-                        v.index = i;
-                        v.weight = dist[u.index] + w;
-                        Insert(h, v);
-                        //printf("%s has been inserted to heap, the weight is %.3f.\n", g->Names[i], dist[i]);
-                        //print_heap(h);
-                        dist[i] = dist[u.index] + w;
-                        prev[i] = u.index;
-                        //printf("%s has been inserted to heap, the weight is %.3f.\n\n", g->Names[i], dist[i]);
-                        //print_heap(h);
-                    }
-                }
-            }
-        }
-    }
+            adjacency_list_node*  node_u = malloc(sizeof(adjacency_list_node));
+            node_u->next = NULL;
+            node_u = g->adjacency_list_array[u.index].head;
+            //printNode(g, u.index);
+            //printf("\n");
 
-    printf("\ndijkstra with min heap(%s):\n", g->Names[src]);
-    for(int i = 0; i < g->N_vertex; i++){
-        int temp = i;
-        bool arrived1 = (temp == src);
-        printf("shortest(%s, %s)=%f\n", g->Names[src], g->Names[i], dist[i]);
-        
-        if(temp == src){
-            printf("the path is %s <- %s\n", g->Names[src], g->Names[temp]);
-            while(!arrived1){
-                printf("%s <- %s\t", g->Names[temp], g->Names[prev[temp]]);
-                temp = prev[temp];
-                arrived1 = (temp == src);
-                //printf("\n");
+            while(node_u != NULL)
+            {
+                int v_id = node_u->nodeID;
+
+                // Insert node v to heap if d[u] + w(u, v) < d[v]
+                if(node_u->weight + dist[u.index] < dist[v_id])
+                {
+                    node v;
+                    v.index = v_id;
+                    v.weight = dist[u.index] + node_u->weight;
+                    Insert(h, v);
+                    //printf("%s has been inserted to heap, the weight is %.3f.\n", g->Names[v_id], dist[v_id]);
+                    //print_heap(h);
+                    dist[v_id] = dist[u.index] + node_u->weight;
+                    prev[v_id] = u.index;
+                    //printf("%s has been inserted to heap, the weight is %.3f.\n", g->Names[v_id], dist[v_id]);
+                }
+                //print_heap(h);
+                node_u = node_u->next;
             }
-            printf("\n\n");
         }
     }
 }

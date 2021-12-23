@@ -62,5 +62,7 @@ int* index_heap(min_heap* h);
 
 void print_heap(min_heap* heap);
 
+bool is_in_heap(min_heap*h, int i);
+
 
 #endif

@@ -34,35 +34,93 @@ char* int2char(int n){
     }
 }
 
+void find_path(L_Graph*g, int src, int dest, int* prev)
+{
+    int count = 2;
+    char** path = (char **) malloc(sizeof(char *) * count);
+    for(int i = 0; i < count; i++)
+    {
+        path[i] = (char *) malloc(sizeof(char));
+    }
+    path[0] = g->Names[dest];
+
+    bool arrived = (dest == src);
+    if(dest == src)
+    {
+        printf("the path is %s %s", g->Names[src], g->Names[dest]);
+    }else
+    {
+        printf("the path is");
+        while(!arrived)
+        {
+            path[count - 1] = g->Names[prev[dest]];
+            dest = prev[dest];
+            arrived = (dest == src);
+            count++;
+            path = realloc(path, sizeof(char **) * count);
+            path[count - 1] = (char *) malloc(sizeof(char));
+        }
+        for(int j = count - 1; j >= 0; j--)
+        {
+            printf("%s ", path[j]);
+        }
+    }
+}
+
+void findpath(M_Graph* g, int src, int dest, int* prev)
+{
+    int count = 2;
+    char** path = (char **) malloc(sizeof(char *) * count);
+    for(int i = 0; i < count; i++)
+    {
+        path[i] = (char *) malloc(sizeof(char));
+    }
+    path[0] = g->Names[dest];
+
+    bool arrived = (dest == src);
+    if(dest == src)
+    {
+        printf("the path is %s %s", g->Names[src], g->Names[dest]);
+    }else
+    {
+        printf("the path is");
+        while(!arrived)
+        {
+            path[count - 1] = g->Names[prev[dest]];
+            dest = prev[dest];
+            arrived = (dest == src);
+            count++;
+            path = realloc(path, sizeof(char **) * count);
+            path[count - 1] = (char *) malloc(sizeof(char));
+        }
+        for(int j = count - 1; j >= 0; j--)
+        {
+            printf("%s ", path[j]);
+        }
+    }
+}
+
 void Dijkstra_resultat_compare(M_Graph* g, int src, double* dist1, int* prev1, double* dist2, int* prev2){
     printf("\ndijkstra without min heap(%s): \t dijkstra min heap(%s)\n", g->Names[src], g->Names[src]);
     for(int i = 0; i < g->N_vertex; i++){
-        int temp = i;
-        int temp2 = i;
-        bool arrived1 = (temp == src);
-        bool arrived2 = (temp2 == src);
-        printf("shortest(%s, %s)=%f\tshortest(%s, %s)=%f\n", g->Names[src], g->Names[i], dist1[i], g->Names[src], g->Names[i], dist2[i]);
         
-        if(temp == src){
-            printf("the path is %s <- %s\n", g->Names[src], g->Names[temp]);
-            printf("the path is %s <- %s\n", g->Names[src], g->Names[temp2]);
-        }else{
-            printf("the path is\t");
-            while(!arrived1){
-                printf("%s <- %s\t", g->Names[temp], g->Names[prev1[temp]]);
-                temp = prev1[temp];
-                arrived1 = (temp == src);
-                //printf("\n");
-            }
-            printf("\n");
-            printf("the path is\t");
-            while(!arrived2){
-                printf("%s <- %s\t", g->Names[temp2], g->Names[prev2[temp2]]);
-                temp2 = prev2[temp2];
-                arrived2 = (temp2 == src);
-                //printf("\n");
-            }
-            printf("\n");
-        }
+        printf("shortest(%s, %s)=%f\tshortest(%s, %s)=%f\n", g->Names[src], g->Names[i], dist1[i], g->Names[src], g->Names[i], dist2[i]);
+        findpath(g, src, i, prev1);
+        printf("\n");
+        findpath(g, src, i, prev2);
+        printf("\n");
+    }
+}
+
+
+void Dijkstra_resultat_compare2(L_Graph* g, int src, double* dist1, int* prev1, double* dist2, int* prev2){
+    printf("\ndijkstra without min heap(%s): \t dijkstra min heap(%s)\n", g->Names[src], g->Names[src]);
+    for(int i = 0; i < g->N_vertex; i++){
+        
+        printf("shortest(%s, %s)=%f\tshortest(%s, %s)=%f\n", g->Names[src], g->Names[i], dist1[i], g->Names[src], g->Names[i], dist2[i]);
+        find_path(g, src, i, prev1);
+        printf("\n");
+        find_path(g, src, i, prev2);
+        printf("\n");
     }
 }

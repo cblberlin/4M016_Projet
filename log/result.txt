@@ -1,519 +1,165 @@
-(base) cblberlin@MacBook-Pro-de-Bailin new projet  % ./bin/main
-Enter the number of vertex: 15
-Enter the number of edge, beware this number is between 0 and n(n-1)/2 included: 30
-Enter the max weight of edge: 2
-The adjacency matrix of graph is:
-	A	B	C	D	E	F	G	H	I	J	K	L	M	N	O
-A	0.000	inf	inf	0.108	inf	1.611	inf	1.590	inf	0.888	inf	0.512	inf	1.640	inf
-B	inf	0.000	1.523	inf	inf	inf	inf	inf	0.307	inf	inf	inf	inf	inf	inf
-C	inf	1.523	0.000	inf	inf	inf	inf	inf	inf	inf	inf	inf	inf	inf	inf
-D	0.108	inf	inf	0.000	inf	inf	inf	0.509	inf	inf	inf	0.067	inf	inf	0.986
-E	inf	inf	inf	inf	0.000	inf	inf	inf	inf	1.659	0.050	inf	inf	inf	1.566
-F	1.611	inf	inf	inf	inf	0.000	1.978	inf	inf	inf	inf	0.558	inf	inf	inf
-G	inf	inf	inf	inf	inf	1.978	0.000	1.606	0.667	inf	inf	inf	inf	1.045	0.352
-H	1.590	inf	inf	0.509	inf	inf	1.606	0.000	0.819	0.837	0.211	inf	inf	inf	inf
-I	inf	0.307	inf	inf	inf	inf	0.667	0.819	0.000	0.230	inf	inf	inf	1.651	1.029
-J	0.888	inf	inf	inf	1.659	inf	inf	0.837	0.230	0.000	inf	inf	inf	1.455	inf
-K	inf	inf	inf	inf	0.050	inf	inf	0.211	inf	inf	0.000	1.151	inf	inf	inf
-L	0.512	inf	inf	0.067	inf	0.558	inf	inf	inf	inf	1.151	0.000	1.975	inf	1.863
-M	inf	inf	inf	inf	inf	inf	inf	inf	inf	inf	inf	1.975	0.000	inf	inf
-N	1.640	inf	inf	inf	inf	inf	1.045	inf	1.651	1.455	inf	inf	inf	0.000	inf
-O	inf	inf	inf	0.986	1.566	inf	0.352	inf	1.029	inf	inf	1.863	inf	inf	0.000
-
-result without min heap
-Enter the index of starting point (from 0 to number of vertices - 1):
-0
-
-dijkstra(A):
-shortest(A, A)=0.000000
-the path is A -> A
-shortest(A, B)=1.425108
-the path is	B -> I	I -> J	J -> A
-shortest(A, C)=2.948218
-the path is	C -> B	B -> I	I -> J	J -> A
-shortest(A, D)=0.107743
-the path is	D -> A
-shortest(A, E)=0.877782
-the path is	E -> K	K -> H	H -> D	D -> A
-shortest(A, F)=0.732581
-the path is	F -> L	L -> D	D -> A
-shortest(A, G)=1.446063
-the path is	G -> O	O -> D	D -> A
-shortest(A, H)=0.616971
-the path is	H -> D	D -> A
-shortest(A, I)=1.118109
-the path is	I -> J	J -> A
-shortest(A, J)=0.887927
-the path is	J -> A
-shortest(A, K)=0.827814
-the path is	K -> H	H -> D	D -> A
-shortest(A, L)=0.175022
-the path is	L -> D	D -> A
-shortest(A, M)=2.150318
-the path is	M -> L	L -> D	D -> A
-shortest(A, N)=1.639924
-the path is	N -> A
-shortest(A, O)=1.093748
-the path is	O -> D	D -> A
-
-result with min heap
-The min heap has been succefully allocated
-The capacity of the min heap is 15
-The current index of the min heap is 0
-        A	 B	 C	 D	 E	 F	 G	 H	 I	 J	 K	 L	 M	 N	 O
-Dist is 0.000	 inf	 inf	 inf	 inf	 inf	 inf	 inf	 inf	 inf	 inf	 inf	 inf	 inf	 inf
-Prev is 0	 -1	 -1	 -1	 -1	 -1	 -1	 -1	 -1	 -1	 -1	 -1	 -1	 -1	 -1
-	Index	Node	Dist
-	0	A	0.000
-	1	B	inf
-	2	C	inf
-	3	D	inf
-	4	E	inf
-	5	F	inf
-	6	G	inf
-	7	H	inf
-	8	I	inf
-	9	J	inf
-	10	K	inf
-	11	L	inf
-	12	M	inf
-	13	N	inf
-	14	O	inf
 Heap is:
 0.000
-inf	inf
-inf	inf	inf	inf
-inf	inf	inf	inf	inf	inf	inf	inf
-	 -> Exploration in A, and his weight is 0.000
-		Examinating the edge A->D and the weight is	0.108
 
-		Before update the adjacent node D has the weight inf and his previous node is (null)
-		After update the adjacent node D has the weight 0.108 and his previous node is A
+A has been extracted, current weight is 0.000, in array dist the value is inf
+C has been inserted to heap, the weight is 5.000.
 
-		Examinating the edge A->F and the weight is	1.611
-
-		Before update the adjacent node F has the weight inf and his previous node is (null)
-		After update the adjacent node F has the weight 1.611 and his previous node is A
-
-		Examinating the edge A->H and the weight is	1.590
-
-		Before update the adjacent node H has the weight inf and his previous node is (null)
-		After update the adjacent node H has the weight 1.590 and his previous node is A
-
-		Examinating the edge A->J and the weight is	0.888
-
-		Before update the adjacent node J has the weight inf and his previous node is (null)
-		After update the adjacent node J has the weight 0.888 and his previous node is A
-
-		Examinating the edge A->L and the weight is	0.512
-
-		Before update the adjacent node L has the weight inf and his previous node is (null)
-		After update the adjacent node L has the weight 0.512 and his previous node is A
-
-		Examinating the edge A->N and the weight is	1.640
-
-		Before update the adjacent node N has the weight inf and his previous node is (null)
-		After update the adjacent node N has the weight 1.640 and his previous node is A
-
-        A	 B	 C	 D	 E	 F	 G	 H	 I	 J	 K	 L	 M	 N	 O
-Dist is 0.000	 inf	 inf	 0.108	 inf	 1.611	 inf	 1.590	 inf	 0.888	 inf	 0.512	 inf	 1.640	 inf
-Prev is 0	 -1	 -1	 0	 -1	 0	 -1	 0	 -1	 0	 -1	 0	 -1	 0	 -1
-	Index	Node	Dist
-	3	D	0.108
-	9	J	0.888
-	11	L	0.512
-	14	O	inf
-	7	H	1.590
-	5	F	1.611
-	13	N	1.640
-	1	B	inf
-	8	I	inf
-	4	E	inf
-	10	K	inf
-	2	C	inf
-	12	M	inf
-	6	G	inf
 Heap is:
-0.108
-0.888	0.512
-inf	1.590	1.611	1.640
-inf	inf	inf	inf	inf	inf	inf
-	 -> Exploration in D, and his weight is 0.108
-		Examinating the edge D->H and the weight is	0.509
+5.000
 
-		Before update the adjacent node H has the weight 1.590 and his previous node is A
-		After update the adjacent node H has the weight 0.617 and his previous node is D
+C has been extracted, current weight is 5.000, in array dist the value is 5.000
+D has been inserted to heap, the weight is 16.000.
 
-		Examinating the edge D->L and the weight is	0.067
-
-		Before update the adjacent node L has the weight 0.512 and his previous node is A
-		After update the adjacent node L has the weight 0.175 and his previous node is D
-
-		Examinating the edge D->O and the weight is	0.986
-
-		Before update the adjacent node O has the weight inf and his previous node is (null)
-		After update the adjacent node O has the weight 1.094 and his previous node is D
-
-        A	 B	 C	 D	 E	 F	 G	 H	 I	 J	 K	 L	 M	 N	 O
-Dist is 0.000	 inf	 inf	 0.108	 inf	 1.611	 inf	 0.617	 inf	 0.888	 inf	 0.175	 inf	 1.640	 1.094
-Prev is 0	 -1	 -1	 0	 -1	 0	 -1	 3	 -1	 0	 -1	 3	 -1	 0	 3
-	Index	Node	Dist
-	2	C	0.175
-	1	B	0.617
-	11	L	0.512
-	9	J	0.888
-	7	H	1.590
-	5	F	1.611
-	14	O	1.094
-	14	O	inf
-	8	I	inf
-	4	E	inf
-	10	K	inf
-	6	G	inf
-	12	M	inf
 Heap is:
-0.175
-0.617	0.512
-0.888	1.590	1.611	1.094
-inf	inf	inf	inf	inf	inf
-	 -> Exploration in C, and his weight is inf
-		Examinating the edge C->B and the weight is	1.523
+16.000
+F has been inserted to heap, the weight is 7.000.
 
-        A	 B	 C	 D	 E	 F	 G	 H	 I	 J	 K	 L	 M	 N	 O
-Dist is 0.000	 inf	 inf	 0.108	 inf	 1.611	 inf	 0.617	 inf	 0.888	 inf	 0.175	 inf	 1.640	 1.094
-Prev is 0	 -1	 -1	 0	 -1	 0	 -1	 3	 -1	 0	 -1	 3	 -1	 0	 3
-	Index	Node	Dist
-	11	L	0.512
-	1	B	0.617
-	14	O	1.094
-	9	J	0.888
-	7	H	1.590
-	5	F	1.611
-	12	M	inf
-	14	O	inf
-	8	I	inf
-	4	E	inf
-	10	K	inf
-	6	G	inf
 Heap is:
-0.512
-0.617	1.094
-0.888	1.590	1.611	inf
-inf	inf	inf	inf	inf
-	 -> Exploration in L, and his weight is 0.175
-		Examinating the edge L->F and the weight is	0.558
+7.000
+16.000	
+G has been inserted to heap, the weight is 8.000.
 
-		Before update the adjacent node F has the weight 1.611 and his previous node is A
-		After update the adjacent node F has the weight 0.733 and his previous node is L
-
-		Examinating the edge L->K and the weight is	1.151
-
-		Before update the adjacent node K has the weight inf and his previous node is (null)
-		After update the adjacent node K has the weight 1.326 and his previous node is L
-
-		Examinating the edge L->M and the weight is	1.975
-
-		Before update the adjacent node M has the weight inf and his previous node is (null)
-		After update the adjacent node M has the weight 2.150 and his previous node is L
-
-		Examinating the edge L->O and the weight is	1.863
-
-        A	 B	 C	 D	 E	 F	 G	 H	 I	 J	 K	 L	 M	 N	 O
-Dist is 0.000	 inf	 inf	 0.108	 inf	 0.733	 inf	 0.617	 inf	 0.888	 1.326	 0.175	 2.150	 1.640	 1.094
-Prev is 0	 -1	 -1	 0	 -1	 11	 -1	 3	 -1	 0	 11	 3	 11	 0	 3
-	Index	Node	Dist
-	1	B	0.617
-	9	J	0.888
-	5	F	0.733
-	6	G	inf
-	10	K	1.326
-	14	O	1.094
-	12	M	inf
-	14	O	inf
-	8	I	inf
-	4	E	inf
-	7	H	1.590
 Heap is:
-0.617
-0.888	0.733
-inf	1.326	1.094	inf
-inf	inf	inf	1.590
-	 -> Exploration in B, and his weight is inf
-		Examinating the edge B->I and the weight is	0.307
+7.000
+16.000	8.000	
+O has been inserted to heap, the weight is 10.000.
 
-        A	 B	 C	 D	 E	 F	 G	 H	 I	 J	 K	 L	 M	 N	 O
-Dist is 0.000	 inf	 inf	 0.108	 inf	 0.733	 inf	 0.617	 inf	 0.888	 1.326	 0.175	 2.150	 1.640	 1.094
-Prev is 0	 -1	 -1	 0	 -1	 11	 -1	 3	 -1	 0	 11	 3	 11	 0	 3
-	Index	Node	Dist
-	5	F	0.733
-	9	J	0.888
-	14	O	1.094
-	6	G	inf
-	10	K	1.326
-	7	H	1.590
-	12	M	inf
-	14	O	inf
-	8	I	inf
-	4	E	inf
 Heap is:
-0.733
-0.888	1.094
-inf	1.326	1.590	inf
-inf	inf	inf
-	 -> Exploration in F, and his weight is 0.733
-		Examinating the edge F->G and the weight is	1.978
+7.000
+10.000	8.000	
+16.000	
 
-		Before update the adjacent node G has the weight inf and his previous node is (null)
-		After update the adjacent node G has the weight 2.710 and his previous node is F
+F has been extracted, current weight is 7.000, in array dist the value is 7.000
+B has been inserted to heap, the weight is 9.000.
 
-        A	 B	 C	 D	 E	 F	 G	 H	 I	 J	 K	 L	 M	 N	 O
-Dist is 0.000	 inf	 inf	 0.108	 inf	 0.733	 2.710	 0.617	 inf	 0.888	 1.326	 0.175	 2.150	 1.640	 1.094
-Prev is 0	 -1	 -1	 0	 -1	 11	 5	 3	 -1	 0	 11	 3	 11	 0	 3
-	Index	Node	Dist
-	9	J	0.888
-	10	K	1.326
-	14	O	1.094
-	6	G	inf
-	4	E	inf
-	7	H	1.590
-	12	M	2.710
-	14	O	inf
-	8	I	inf
 Heap is:
-0.888
-1.326	1.094
-inf	inf	1.590	2.710
-inf	inf
-	 -> Exploration in J, and his weight is 0.888
-		Examinating the edge J->E and the weight is	1.659
+8.000
+9.000	16.000	
+10.000	
+E has been inserted to heap, the weight is 8.000.
 
-		Before update the adjacent node E has the weight inf and his previous node is (null)
-		After update the adjacent node E has the weight 2.547 and his previous node is J
-
-		Examinating the edge J->H and the weight is	0.837
-
-		Examinating the edge J->I and the weight is	0.230
-
-		Before update the adjacent node I has the weight inf and his previous node is (null)
-		After update the adjacent node I has the weight 1.118 and his previous node is J
-
-		Examinating the edge J->N and the weight is	1.455
-
-        A	 B	 C	 D	 E	 F	 G	 H	 I	 J	 K	 L	 M	 N	 O
-Dist is 0.000	 inf	 inf	 0.108	 2.547	 0.733	 2.710	 0.617	 1.118	 0.888	 1.326	 0.175	 2.150	 1.640	 1.094
-Prev is 0	 -1	 -1	 0	 9	 11	 5	 3	 9	 0	 11	 3	 11	 0	 3
-	Index	Node	Dist
-	14	O	1.094
-	8	I	1.118
-	7	H	1.590
-	10	K	1.326
-	4	E	2.547
-	8	I	inf
-	12	M	2.710
-	14	O	inf
 Heap is:
-1.094
-1.118	1.590
-1.326	2.547	inf	2.710
-inf
-	 -> Exploration in O, and his weight is 1.094
-		Examinating the edge O->E and the weight is	1.566
+8.000
+8.000	16.000	
+10.000	9.000	
 
-		Examinating the edge O->G and the weight is	0.352
+G has been extracted, current weight is 8.000, in array dist the value is 8.000
 
-		Before update the adjacent node G has the weight 2.710 and his previous node is F
-		After update the adjacent node G has the weight 1.446 and his previous node is O
+E has been extracted, current weight is 8.000, in array dist the value is 8.000
+H has been inserted to heap, the weight is 10.000.
 
-		Examinating the edge O->I and the weight is	1.029
-
-        A	 B	 C	 D	 E	 F	 G	 H	 I	 J	 K	 L	 M	 N	 O
-Dist is 0.000	 inf	 inf	 0.108	 2.547	 0.733	 1.446	 0.617	 1.118	 0.888	 1.326	 0.175	 2.150	 1.640	 1.094
-Prev is 0	 -1	 -1	 0	 9	 11	 14	 3	 9	 0	 11	 3	 11	 0	 3
-	Index	Node	Dist
-	8	I	1.118
-	10	K	1.326
-	12	M	1.446
-	14	O	inf
-	4	E	2.547
-	8	I	inf
-	7	H	1.590
 Heap is:
-1.118
-1.326	1.446
-inf	2.547	inf	1.590
-	 -> Exploration in I, and his weight is 1.118
-		Examinating the edge I->G and the weight is	0.667
+9.000
+10.000	16.000	
+10.000	
+I has been inserted to heap, the weight is 15.000.
 
-		Examinating the edge I->H and the weight is	0.819
-
-		Examinating the edge I->N and the weight is	1.651
-
-        A	 B	 C	 D	 E	 F	 G	 H	 I	 J	 K	 L	 M	 N	 O
-Dist is 0.000	 inf	 inf	 0.108	 2.547	 0.733	 1.446	 0.617	 1.118	 0.888	 1.326	 0.175	 2.150	 1.640	 1.094
-Prev is 0	 -1	 -1	 0	 9	 11	 14	 3	 9	 0	 11	 3	 11	 0	 3
-	Index	Node	Dist
-	10	K	1.326
-	7	H	1.590
-	12	M	1.446
-	14	O	inf
-	4	E	2.547
-	8	I	inf
 Heap is:
-1.326
-1.590	1.446
-inf	2.547	inf
-	 -> Exploration in K, and his weight is 1.326
-		Examinating the edge K->E and the weight is	0.050
+9.000
+10.000	16.000	
+10.000	15.000	
 
-		Before update the adjacent node E has the weight 2.547 and his previous node is J
-		After update the adjacent node E has the weight 1.376 and his previous node is K
+B has been extracted, current weight is 9.000, in array dist the value is 9.000
+D has been inserted to heap, the weight is 13.000.
 
-		Examinating the edge K->H and the weight is	0.211
-
-        A	 B	 C	 D	 E	 F	 G	 H	 I	 J	 K	 L	 M	 N	 O
-Dist is 0.000	 inf	 inf	 0.108	 1.376	 0.733	 1.446	 0.617	 1.118	 0.888	 1.326	 0.175	 2.150	 1.640	 1.094
-Prev is 0	 -1	 -1	 0	 10	 11	 14	 3	 9	 0	 11	 3	 11	 0	 3
-	Index	Node	Dist
-	4	E	1.376
-	12	M	1.446
-	8	I	inf
-	14	O	inf
-	7	H	1.590
 Heap is:
-1.376
-1.446	inf
-inf	1.590
-	 -> Exploration in E, and his weight is 1.376
-        A	 B	 C	 D	 E	 F	 G	 H	 I	 J	 K	 L	 M	 N	 O
-Dist is 0.000	 inf	 inf	 0.108	 1.376	 0.733	 1.446	 0.617	 1.118	 0.888	 1.326	 0.175	 2.150	 1.640	 1.094
-Prev is 0	 -1	 -1	 0	 10	 11	 14	 3	 9	 0	 11	 3	 11	 0	 3
-	Index	Node	Dist
-	12	M	1.446
-	7	H	1.590
-	8	I	inf
-	14	O	inf
+10.000
+10.000	16.000	
+15.000	13.000	
+
+O has been extracted, current weight is 10.000, in array dist the value is 10.000
+N has been inserted to heap, the weight is 12.000.
+
 Heap is:
-1.446
-1.590	inf
-inf
-	 -> Exploration in M, and his weight is 2.150
-        A	 B	 C	 D	 E	 F	 G	 H	 I	 J	 K	 L	 M	 N	 O
-Dist is 0.000	 inf	 inf	 0.108	 1.376	 0.733	 1.446	 0.617	 1.118	 0.888	 1.326	 0.175	 2.150	 1.640	 1.094
-Prev is 0	 -1	 -1	 0	 10	 11	 14	 3	 9	 0	 11	 3	 11	 0	 3
-	Index	Node	Dist
-	7	H	1.590
-	14	O	inf
-	8	I	inf
+10.000
+12.000	16.000	
+15.000	13.000	
+P has been inserted to heap, the weight is 13.000.
+
 Heap is:
-1.590
-inf	inf
-	 -> Exploration in H, and his weight is 0.617
-		Examinating the edge H->G and the weight is	1.606
+10.000
+12.000	13.000	
+15.000	13.000	16.000	
 
-        A	 B	 C	 D	 E	 F	 G	 H	 I	 J	 K	 L	 M	 N	 O
-Dist is 0.000	 inf	 inf	 0.108	 1.376	 0.733	 1.446	 0.617	 1.118	 0.888	 1.326	 0.175	 2.150	 1.640	 1.094
-Prev is 0	 -1	 -1	 0	 10	 11	 14	 3	 9	 0	 11	 3	 11	 0	 3
-	Index	Node	Dist
-	8	I	inf
-	14	O	inf
+H has been extracted, current weight is 10.000, in array dist the value is 10.000
+
+N has been extracted, current weight is 12.000, in array dist the value is 12.000
+M has been inserted to heap, the weight is 15.000.
+
 Heap is:
-inf
-inf
-	 -> Exploration in I, and his weight is 1.118
-		Examinating the edge I->G and the weight is	0.667
+13.000
+15.000	13.000	
+16.000	15.000	
 
-		Examinating the edge I->N and the weight is	1.651
+D has been extracted, current weight is 13.000, in array dist the value is 13.000
 
-        A	 B	 C	 D	 E	 F	 G	 H	 I	 J	 K	 L	 M	 N	 O
-Dist is 0.000	 inf	 inf	 0.108	 1.376	 0.733	 1.446	 0.617	 1.118	 0.888	 1.326	 0.175	 2.150	 1.640	 1.094
-Prev is 0	 -1	 -1	 0	 10	 11	 14	 3	 9	 0	 11	 3	 11	 0	 3
-	Index	Node	Dist
-	14	O	inf
+P has been extracted, current weight is 13.000, in array dist the value is 13.000
+I has been inserted to heap, the weight is 14.000.
+
 Heap is:
-inf
-	 -> Exploration in O, and his weight is 1.094
-		Examinating the edge O->G and the weight is	0.352
+14.000
+15.000	15.000	
+16.000	
+J has been inserted to heap, the weight is 15.000.
 
-        A	 B	 C	 D	 E	 F	 G	 H	 I	 J	 K	 L	 M	 N	 O
-Dist is 0.000	 inf	 inf	 0.108	 1.376	 0.733	 1.446	 0.617	 1.118	 0.888	 1.326	 0.175	 2.150	 1.640	 1.094
-Prev is 0	 -1	 -1	 0	 10	 11	 14	 3	 9	 0	 11	 3	 11	 0	 3
+Heap is:
+14.000
+15.000	15.000	
+16.000	15.000	
 
-dijkstra(A):
+I has been extracted, current weight is 14.000, in array dist the value is 14.000
+
+J has been extracted, current weight is 15.000, in array dist the value is 15.000
+
+I has been extracted, current weight is 15.000, in array dist the value is 14.000
+
+M has been extracted, current weight is 15.000, in array dist the value is 15.000
+L has been inserted to heap, the weight is 17.000.
+
+Heap is:
+16.000
+17.000	
+
+D has been extracted, current weight is 16.000, in array dist the value is 13.000
+
+L has been extracted, current weight is 17.000, in array dist the value is 17.000
+K has been inserted to heap, the weight is 27.000.
+
+Heap is:
+27.000
+
+K has been extracted, current weight is 27.000, in array dist the value is 27.000
+
+dijkstra(A): 
 shortest(A, A)=0.000000
 the path is A -> A
-shortest(A, B)=inf
-the path is	B -> (null)	(null) -> A
-shortest(A, C)=inf
-the path is	C -> (null)	(null) -> A
-shortest(A, D)=0.107743
-the path is	D -> A
-shortest(A, E)=1.375805
-the path is	E -> K	K -> L	L -> D	D -> A
-shortest(A, F)=0.732581
-the path is	F -> L	L -> D	D -> A
-shortest(A, G)=1.446063
-the path is	G -> O	O -> D	D -> A
-shortest(A, H)=0.616971
-the path is	H -> D	D -> A
-shortest(A, I)=1.118109
-the path is	I -> J	J -> A
-shortest(A, J)=0.887927
-the path is	J -> A
-shortest(A, K)=1.325837
-the path is	K -> L	L -> D	D -> A
-shortest(A, L)=0.175022
-the path is	L -> D	D -> A
-shortest(A, M)=2.150318
-the path is	M -> L	L -> D	D -> A
-shortest(A, N)=1.639924
-the path is	N -> A
-shortest(A, O)=1.093748
-the path is	O -> D	D -> A
-
-dijkstra without min heap(A): 	 dijkstra min heap(A)
-shortest(A, A)=0.000000	shortest(A, A)=0.000000
-the path is A -> A
-the path is A -> A
-shortest(A, B)=1.425108	shortest(A, B)=inf
-the path is	B -> I	I -> J	J -> A
-the path is	A -> A
-shortest(A, C)=2.948218	shortest(A, C)=inf
-the path is	C -> B	B -> I	I -> J	J -> A
-the path is	A -> A
-shortest(A, D)=0.107743	shortest(A, D)=0.107743
-the path is	D -> A
-the path is	A -> A
-shortest(A, E)=0.877782	shortest(A, E)=1.375805
-the path is	E -> K	K -> H	H -> D	D -> A
-the path is	A -> A
-shortest(A, F)=0.732581	shortest(A, F)=0.732581
-the path is	F -> L	L -> D	D -> A
-the path is	A -> A
-shortest(A, G)=1.446063	shortest(A, G)=1.446063
-the path is	G -> O	O -> D	D -> A
-the path is	A -> A
-shortest(A, H)=0.616971	shortest(A, H)=0.616971
-the path is	H -> D	D -> A
-the path is	A -> A
-shortest(A, I)=1.118109	shortest(A, I)=1.118109
-the path is	I -> J	J -> A
-the path is	A -> A
-shortest(A, J)=0.887927	shortest(A, J)=0.887927
-the path is	J -> A
-the path is	A -> A
-shortest(A, K)=0.827814	shortest(A, K)=1.325837
-the path is	K -> H	H -> D	D -> A
-the path is	A -> A
-shortest(A, L)=0.175022	shortest(A, L)=0.175022
-the path is	L -> D	D -> A
-the path is	A -> A
-shortest(A, M)=2.150318	shortest(A, M)=2.150318
-the path is	M -> L	L -> D	D -> A
-the path is	A -> A
-shortest(A, N)=1.639924	shortest(A, N)=1.639924
-the path is	N -> A
-the path is	A -> A
-shortest(A, O)=1.093748	shortest(A, O)=1.093748
-the path is	O -> D	D -> A
-the path is	A -> A
-(base) cblberlin@MacBook-Pro-de-Bailin new projet  %
+shortest(A, B)=9.000000
+the path is	B -> F	F -> C	C -> A	
+shortest(A, C)=5.000000
+the path is	C -> A	
+shortest(A, D)=13.000000
+the path is	D -> B	B -> F	F -> C	C -> A	
+shortest(A, E)=8.000000
+the path is	E -> F	F -> C	C -> A	
+shortest(A, F)=7.000000
+the path is	F -> C	C -> A	
+shortest(A, G)=8.000000
+the path is	G -> C	C -> A	
+shortest(A, H)=10.000000
+the path is	H -> E	E -> F	F -> C	C -> A	
+shortest(A, I)=14.000000
+the path is	I -> P	P -> O	O -> C	C -> A	
+shortest(A, J)=15.000000
+the path is	J -> P	P -> O	O -> C	C -> A	
+shortest(A, K)=27.000000
+the path is	K -> L	L -> M	M -> N	N -> O	O -> C	C -> A	
+shortest(A, L)=17.000000
+the path is	L -> M	M -> N	N -> O	O -> C	C -> A	
+shortest(A, M)=15.000000
+the path is	M -> N	N -> O	O -> C	C -> A	
+shortest(A, N)=12.000000
+the path is	N -> O	O -> C	C -> A	
+shortest(A, O)=10.000000
+the path is	O -> C	C -> A	
+shortest(A, P)=13.000000
+the path is	P -> O	O -> C	C -> A
