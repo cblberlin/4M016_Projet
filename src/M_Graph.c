@@ -1,6 +1,7 @@
 #include <assert.h>
 #include <string.h>
 #include <time.h>
+#include <string.h>
 #include "M_Graph.h"
 #include "utilities.h"
 
@@ -42,15 +43,89 @@ M_Graph* init_graph(int n){
 }
 
 /*
-    TODO
     read graph from a file
 */
 M_Graph* read_graph(char* filename){
     M_Graph* g = (M_Graph*) malloc(sizeof(M_Graph));
-    //char* line = malloc(sizeof(char));
-    
-    //init_graph(g);
+    FILE* f;
+    f = fopen(filename, "r");
+    if(f == NULL)
+    {
+        printf("can't open file");
+        exit(EXIT_FAILURE);
+    }
+    char line[255];
+    int count = 0;
+    //printf("test\n");
+    //fgets(line, 255, f)
+    while(fgets(line, 255, f) != NULL)
+    {
+
+        if(count == 0)
+        {
+            char *token = strtok(line, " ");
+            int n;
+            int v;
+            n = atoi(token);
+            //printf("n = %d", n);
+            token = strtok(NULL, " ");
+            v = atoi(token);
+            //printf("v = %d", v);
+            g->N_vertex = n;
+            g = init_graph(n);
+            g->N_edge = v;
+            count++;
+        }else
+        {
+            int a, b;
+            double w;
+            char *eptr;
+            char *token = strtok(line, " ");
+            a = atoi(token);
+            token = strtok(NULL, " ");
+            b = atoi(token);
+            token = strtok(NULL, " ");
+            w = strtod(token, &eptr);
+            g->weights[a][b] = w;
+            count++;
+        }
+    }
+    fclose(f);
     return g;
+}
+
+void save_graph(M_Graph* g, char* filename)
+{
+    FILE * f;
+    f = fopen(filename, "w");
+    if(f == NULL)
+    {
+        printf("Can't save file!\n");   
+        exit(EXIT_FAILURE);             
+    }
+    fprintf(f, "%d", g->N_vertex);
+    fprintf(f, " ");
+    fprintf(f, "%d", g->N_edge);
+    fprintf(f, "\n");
+    for(int i = 0; i < g->N_vertex; i++)
+    {
+        for(int j = i; j < g->N_vertex; j++)
+        {
+            if(g->weights[i][j] == 0. || g->weights[i][j] == INFINITY)
+            {
+                continue;
+            }else
+            {
+                fprintf(f, "%d", i);
+                fprintf(f, " ");
+                fprintf(f, "%d", j);
+                fprintf(f, " ");
+                fprintf(f, "%f", g->weights[i][j]);
+                fprintf(f, "\n");
+            }
+        }
+    }
+    
 }
 
 /*

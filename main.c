@@ -85,7 +85,7 @@ int main(){
     int n = 15;
     test_heap(n);
     */
-
+    /*
     printf("test adjacency list\n");
     L_Graph* g = (L_Graph *) malloc(sizeof(L_Graph *));
     Create_L_Graph(g, 16);
@@ -119,6 +119,14 @@ int main(){
     int* prev = (int *) malloc(g->N_vertex * sizeof(int));
 
     single_source_dijkstra_adj_list_min_heap(g, 0, dist, prev);
+    */
 
+    // test read file
+    char* filename = "test/testfile1.txt";
+    M_Graph* g = malloc(sizeof(M_Graph));
+    g = init_graph(15);
+    g = create_graph_random(g, 15, 30, 20.);
+    print_graph(g);
+    save_graph(g, filename);
     return 0;
 }
