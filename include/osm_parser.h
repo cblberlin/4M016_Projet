@@ -3,15 +3,34 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <libxml/parser.h>
 #include <libxml/tree.h>
-//#include <expat.h>
+#include "L_Graph.h"
+#include "M_Graph.h"
 
-/*
-TODO
-*/
-typedef struct OSM_FILE_{
+typedef struct xml_node_t
+{
+    long id;
+    double lon;
+    double lat;
+    int index;
+}xml_node_t;
 
-}OSM_FILE;
+typedef struct xml_way_t
+{
+    char* name;
+    xml_node_t* refs;
+}xml_way_t;
+
+long getID(xmlNode* cur);
+
+double getLat(xmlNode* cur);
+
+double getLon(xmlNode* cur);
+
+void print_element_names(xmlNode * a_node);
+
+void getAllNodes(xmlDoc* doc);
 
 #endif

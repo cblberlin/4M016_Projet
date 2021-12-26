@@ -27,7 +27,7 @@ debug: makedir $(EXEC)
 
 # For multiple binaries
 $(EXEC) : %: %.c $(OBJS)
-	$(CC) $(CXXFLAGS) -o $(BINDIR)/$@ $^ -lm
+	$(CC) $(CXXFLAGS) -o $(BINDIR)/$@ $^ -lm -lxml2
 
 # ... With debug mode on
 $(DEBUG) : %: %.c $(OBJS)

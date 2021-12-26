@@ -40,4 +40,6 @@ void printGraph(L_Graph* g);
 void create_L_graph_random(L_Graph* g, int n, int e, double max_wweight);
 
 double get_weight(L_Graph* g, int i, int j);
+
+L_Graph readGraph(char* filename);
 #endif

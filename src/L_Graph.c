@@ -152,3 +152,8 @@ double get_weight(L_Graph* g, int i, int j)
     return INFINITY;
     
 }
+
+L_Graph* readGraph(char* filename)
+{
+    
+}
