@@ -4,6 +4,7 @@
 #include "L_Graph.h"
 #include "utilities.h"
 
+
 /*
     Create an empty graph
     input: int n: the number of vertex

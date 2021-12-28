@@ -16,7 +16,9 @@
         "string_view": "c",
         "unordered_map": "c",
         "utility": "c",
-        "vector": "c"
+        "vector": "c",
+        "functional": "c",
+        "m_graph.h": "c"
     },
     "C_Cpp.errorSquiggles": "Disabled"
 }

@@ -1,21 +1,22 @@
-#include "osm_parser.h"
+#include <stdio.h>
+#include <string.h>
+#include <libxml/parser.h>
+#include <libxml/tree.h>
+#include <libxml/xpath.h>
 
-xml_node_t* nodes;
+typedef struct xml_node_t
+{
+    long id;
+    double lon;
+    double lat;
+}xml_node_t;
 
-int nb_vertex = 0;
 
-xmlDocPtr
-getdoc (char *docname) {
-	xmlDocPtr doc;
-	doc = xmlParseFile(docname);
-	
-	if (doc == NULL ) {
-		fprintf(stderr,"Document not parsed successfully. \n");
-		return NULL;
-	}
-
-	return doc;
-}
+typedef struct xml_way_t
+{
+    long id;
+    long* ref;
+}xml_way_t;
 
 long getID(xmlNode* cur)
 {
@@ -35,6 +36,19 @@ double getLon(xmlNode* cur)
     char* ptr;
     double lon = strtod( (const char *) xmlGetProp(cur, (const xmlChar *) "lon" ), &ptr);
     return lon;
+}
+
+xmlDocPtr
+getdoc (char *docname) {
+	xmlDocPtr doc;
+	doc = xmlParseFile(docname);
+	
+	if (doc == NULL ) {
+		fprintf(stderr,"Document not parsed successfully. \n");
+		return NULL;
+	}
+
+	return doc;
 }
 
 void print_element_names(xmlNode * a_node)
@@ -112,42 +126,58 @@ void getAllNodes(xmlNode * a_node)
     }
 }
 
-void getAllWay(xmlDoc* doc, xml_way_t* ways)
-{
-    xmlChar *xpath = (xmlChar*) ("/osm/way[tag/@k='highway']");
+int
+main(int argc, char **argv) {
+
+	char *docname;
+	xmlDocPtr doc;
+	xmlChar *xpath = (xmlChar*) ("/osm/way[tag/@k='highway']");
 	xmlNodeSetPtr nodeset;
 	xmlXPathObjectPtr result;
 	int i;
+	xmlChar *keyword;
+		
+	if (argc <= 1) {
+		printf("Usage: %s docname\n", argv[0]);
+		return(0);
+	}
 
-    result = getnodeset(doc, xpath);
-    int cnt = 1;
-    ways = (xml_way_t *) malloc(sizeof(xml_way_t) * cnt);
+	docname = argv[1];
+	doc = getdoc(docname);
 
-    if(result)
-    {
-        nodeset = result->nodesetval;
+    // print all nodes information
+    xmlNode *root_element = NULL;
+    root_element = xmlDocGetRootElement(doc);
+    print_element_names(root_element);
 
-        for(i = 0; i < nodeset->nodeNr; i++)
-        {
+    // print all ways information
+	result = getnodeset (doc, xpath);
+	if (result) {
+		nodeset = result->nodesetval;
+		for (i=0; i < nodeset->nodeNr; i++) {
+            printf("way id: %s\n", xmlGetProp( nodeset->nodeTab[i], BAD_CAST "id" ));
             xmlNodePtr cur = nodeset->nodeTab[i]->children;
-            ways[cnt - 1].id = getID(nodeset->nodeTab[i]);
-            long* temp = (long *) malloc(sizeof(long));
             while(cur != NULL)
             {
-                if(cur->type == XML_ELEMENT_NODE)
-                {
-                    int cnt_ref = 0;
-                    if(!(xmlStrcmp(cur->name, BAD_CAST "nd")))
+                if (cur->type == XML_ELEMENT_NODE) 
+                {   
+                    //printf("\t%s", cur->name);
+                    if (!(xmlStrcmp(cur->name, BAD_CAST "nd")))
                     {
-                        temp[cnt_ref] = atol((const char *) xmlGetProp(cur, BAD_CAST "ref"));
-                        cnt_ref++;
+                        keyword = xmlGetProp(cur, BAD_CAST "ref");
+                        printf("\tref is %s\n", keyword);
                     }
+                    //cur = cur->next;
                 }
                 cur = cur->next;
             }
-            ways[cnt - 1].ref = temp;
-            cnt++;
-            ways = realloc(ways, sizeof(xml_way_t) * cnt);
-        }
-    }
+			//keyword = xmlGetProp(nodeset->nodeTab[i], BAD_CAST "ref");
+		    //printf("keyword: %s\n", keyword);
+		    //xmlFree(keyword);
+		}
+		xmlXPathFreeObject (result);
+	}
+	xmlFreeDoc(doc);
+	xmlCleanupParser();
+	return (1);
 }

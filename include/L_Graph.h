@@ -5,6 +5,8 @@
 #include <stdlib.h>
 #include <math.h>
 
+#include "osm_parser.h"
+
 #ifdef INFINITY
 
 #endif
@@ -41,5 +43,5 @@ void create_L_graph_random(L_Graph* g, int n, int e, double max_wweight);
 
 double get_weight(L_Graph* g, int i, int j);
 
-L_Graph readGraph(char* filename);
+L_Graph* readGraph(char* filename);
 #endif

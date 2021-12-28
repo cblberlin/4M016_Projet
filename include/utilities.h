@@ -14,4 +14,6 @@ void Dijkstra_resultat_compare(M_Graph* g, int src, double* dist1, int* prev1, d
 
 void Dijkstra_resultat_compare2(L_Graph* g, int src, double* dist1, int* prev1, double* dist2, int* prev2);
 
+void print_result(M_Graph*g, int src, double* dist, int* prev);
+
 #endif

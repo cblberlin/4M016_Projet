@@ -83,6 +83,7 @@ void findpath(M_Graph* g, int src, int dest, int* prev)
         printf("the path is %s %s", g->Names[src], g->Names[dest]);
     }else
     {
+        //printf("%d", dest);
         printf("the path is");
         while(!arrived)
         {
@@ -122,5 +123,15 @@ void Dijkstra_resultat_compare2(L_Graph* g, int src, double* dist1, int* prev1, 
         printf("\n");
         find_path(g, src, i, prev2);
         printf("\n");
+    }
+}
+
+void print_result(M_Graph*g, int src, double* dist, int* prev)
+{
+    for(int i = 0; i < g->N_vertex; i++){
+        printf("shortest(%s, %s)=%f\n", g->Names[src], g->Names[i], dist[i]);
+        findpath(g, src, i, prev);
+        //printf("%lf\t%d", dist[i], prev[i]);
+        printf("\n\n");
     }
 }

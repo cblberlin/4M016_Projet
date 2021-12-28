@@ -10,45 +10,57 @@ with given single source vertex and single destination vertex,
 return the minimum length of path with algo dijkstra
 without using min-heap
 */
-void single_source_dijkstra(M_Graph* g, int src, double* dist, int* prev){
-    int i, j, k;
+void single_source_dijkstra(M_Graph* g, int src, double* dist, int* prev)
+{
+    int i,j,k;
     double min;
-    double temp;
-    int* flag = (int *) malloc(sizeof(int) * g->N_vertex);
-
-    //dist = malloc(sizeof(double) * g->N_vertex);
-    //prev = malloc(sizeof(int) * g->N_vertex);
-    for(i = 0; i < g->N_vertex; i++){
-        //printf("test1\n");
-        flag[i] = 0;
-        prev[i] = 0;
+    double tmp;
+    int* flag = (int *) malloc(sizeof(int) * g->N_vertex);     
+    
+    // initialisation
+    for (i = 0; i < g->N_vertex; i++)
+    {
+        flag[i] = 0;              
+        prev[i] = 0;              
         dist[i] = g->weights[src][i];
     }
-    //printf("test1\n");
+
+    // initialisation for src
     flag[src] = 1;
     dist[src] = 0;
-    //printf("test1\n");
-    for(i = 0; i < g->N_vertex; i++){
+
+    // 遍历G.vexnum-1次；每次找出一个顶点的最短路径。traverse all nodes, find the minimum distance
+    for (i = 1; i < g->N_vertex; i++)
+    {
+        // for all nodes not visited yet, find the node with shortest distance with src
         min = INFINITY;
-        for(j = 0; j < g->N_vertex; j++){
-            //printf("%d\n", flag[i]);
-            if(flag[j] == 0 && dist[j] < min){
-                //printf("test1\n");
+        for (j = 0; j < g->N_vertex; j++)
+        {
+            if (flag[j]==0 && dist[j]<min)
+            {
                 min = dist[j];
                 k = j;
-                //printf("test1\n");
             }
         }
+        // mark ad visited
         flag[k] = 1;
 
-        for(j = 0; j < g->N_vertex; j++){
-            temp = (g->weights[k][j] == INFINITY ? INFINITY : (min + g->weights[k][j]));
-            if(flag[j] == 0 && (temp < dist[j])){
-                dist[j] = temp;
+        // correct the shortest distance for the rest node
+        for (j = 0; j < g->N_vertex; j++)
+        {
+            tmp = (g->weights[k][j]==INFINITY ? INFINITY : (min + g->weights[k][j])); // 防止溢出
+            if (flag[j] == 0 && (tmp  < dist[j]) )
+            {
+                dist[j] = tmp;
                 prev[j] = k;
             }
         }
     }
+
+    // 打印dijkstra最短路径的结果
+    //printf("dijkstra(%s): \n", g->Names[src]);
+    //for (i = 0; i < g->N_vertex; i++)
+        //printf("  shortest(%s, %s)=%.3f\n", g->Names[src], g->Names[i], dist[i]);
 }
 
 void single_source_dijkstra_min_heap(M_Graph* g, int src, double* dist, int* prev){

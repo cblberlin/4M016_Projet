@@ -6,22 +6,33 @@
 #include <string.h>
 #include <libxml/parser.h>
 #include <libxml/tree.h>
+#include <libxml/xpath.h>
+#include <libxml/xpathInternals.h>
+#include <libxml/HTMLparser.h>
 #include "L_Graph.h"
 #include "M_Graph.h"
+#include "uthash.h"
 
 typedef struct xml_node_t
 {
     long id;
     double lon;
     double lat;
-    int index;
 }xml_node_t;
+
+typedef struct xml_node_hash_table
+{
+    xml_node_t node;
+    UT_hash_handle hh;
+}xml_node_hash_table;
 
 typedef struct xml_way_t
 {
-    char* name;
-    xml_node_t* refs;
+    long id;
+    long* ref;
 }xml_way_t;
+
+xmlDocPtr getdoc (char *docname);
 
 long getID(xmlNode* cur);
 
@@ -29,8 +40,13 @@ double getLat(xmlNode* cur);
 
 double getLon(xmlNode* cur);
 
+xmlXPathObjectPtr getnodeset (xmlDocPtr doc, xmlChar *xpath);
+
+void getAllNodes(xmlNode * a_node);
+
+void getAllWay(xmlDoc* doc, xml_way_t* ways);
+
 void print_element_names(xmlNode * a_node);
 
-void getAllNodes(xmlDoc* doc);
 
 #endif
