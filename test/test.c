@@ -102,28 +102,87 @@ xmlXPathObjectPtr getnodeset (xmlDocPtr doc, xmlChar *xpath)
     return result;
 }
 
-void getAllNodes(xmlNode * a_node)
+void getAllNodes(xmlDocPtr doc, xml_node_t** nodes, int* nb)
 {
-    xmlNode *cur_node = NULL;
-    //nodes = realloc(nodes, sizeof(xml_node_t) * cnt);
-    //printf("test\n");
-    nodes = realloc(nodes, nb_vertex++);
-    for (cur_node = a_node; cur_node; cur_node = cur_node->next) {
-        //printf("node name is %s\n", cur_node->name);
-        if (cur_node->type == XML_ELEMENT_NODE) 
-        {
-            if(!(xmlStrcmp ( cur_node->name, ( const xmlChar * ) "node" )))
-            {
-                nodes[nb_vertex - 1].id = getID(cur_node);
-                nodes[nb_vertex - 1].lat = getLat(cur_node);
-                nodes[nb_vertex - 1].lon = getLon(cur_node);
-                
-                nb_vertex++;
+    xmlChar* xpath = (xmlChar *) ("/osm/node");
+    xmlXPathObjectPtr result;
+    result = getnodeset(doc, xpath);
+    xmlNodeSetPtr nodeset;
+    //nb = (int *) malloc(sizeof(int));
+    *nb = 0;
+    if(result)
+    {
 
-            }
+        nodeset = result->nodesetval;
+        nodes[0] = (xml_node_t *) malloc(sizeof(xml_node_t) * result->nodesetval->nodeNr);
+        printf("size of node is %d\n", nodeset->nodeNr);
+        for(int i = 0; i < nodeset->nodeNr; i++)
+        {
+            //printf("node id is: %s\n", xmlGetProp(nodeset->nodeTab[i], BAD_CAST "id"));
+            
+            xmlNodePtr cur = nodeset->nodeTab[i];
+            
+                if(cur->type == XML_ELEMENT_NODE)
+                {
+                    
+                    //if(!(xmlStrcmp(cur->name, BAD_CAST "node")))
+                    if(!(xmlStrcmp ( cur->name, ( const xmlChar * ) "node" )))
+                    {
+                        //printf("cur name is %s\n", cur->name);
+                        nodes[0][i].id = getID(cur);
+                        nodes[0][i].lat = getLat(cur);
+                        nodes[0][i].lon = getLon(cur);
+                        //printf("id is %ld\n", nodes[0][i].id);
+  
+                        (*nb)++;                 
+                    }
+                }
+                //cur = cur->next;
+            
         }
-        getAllNodes(cur_node->children);
+        xmlXPathFreeObject (result);
     }
+}
+
+void getAllWay(xmlDoc* doc, xml_way_t** ways, int *nb)
+{
+    xmlChar *xpath = (xmlChar*) ("/osm/way[tag/@k='highway']");
+	xmlNodeSetPtr nodeset;
+	xmlXPathObjectPtr result;
+	int i;
+
+    result = getnodeset(doc, xpath);
+
+
+    if(result)
+    {
+        nodeset = result->nodesetval;
+        ways[0] = (xml_way_t *) malloc(sizeof(xml_way_t) * result->nodesetval->nodeNr);
+        nodeset = result->nodesetval;
+
+        for(i = 0; i < nodeset->nodeNr; i++)
+        {
+            xmlNodePtr cur = nodeset->nodeTab[i]->children;
+            ways[0][i].id = getID(nodeset->nodeTab[i]);
+            ways[0][i].ref = (long *) malloc(sizeof(long));
+            while(cur != NULL)
+            {
+                if(cur->type == XML_ELEMENT_NODE)
+                {
+                    int cnt_ref = 1;
+                    if(!(xmlStrcmp(cur->name, BAD_CAST "nd")))
+                    {
+                        ways[0][i].ref[cnt_ref - 1] = atol((const char *) xmlGetProp(cur, BAD_CAST "ref"));
+                        cnt_ref++;
+                        ways[0][i].ref = realloc(ways[0][i].ref, sizeof(long) * cnt_ref);
+                    }
+                }
+                cur = cur->next;
+            }
+            (*nb)++;
+        }
+    }
+    xmlXPathFreeObject (result);
 }
 
 int
@@ -131,11 +190,7 @@ main(int argc, char **argv) {
 
 	char *docname;
 	xmlDocPtr doc;
-	xmlChar *xpath = (xmlChar*) ("/osm/way[tag/@k='highway']");
-	xmlNodeSetPtr nodeset;
-	xmlXPathObjectPtr result;
-	int i;
-	xmlChar *keyword;
+
 		
 	if (argc <= 1) {
 		printf("Usage: %s docname\n", argv[0]);
@@ -145,39 +200,29 @@ main(int argc, char **argv) {
 	docname = argv[1];
 	doc = getdoc(docname);
 
-    // print all nodes information
-    xmlNode *root_element = NULL;
-    root_element = xmlDocGetRootElement(doc);
-    print_element_names(root_element);
+    xml_node_t** nodes = (xml_node_t **) malloc(sizeof(xml_node_t*));
+    nodes[0] = (xml_node_t *) malloc(sizeof(xml_node_t));
+    int nb;
+    getAllNodes(doc, nodes, &nb);
 
-    // print all ways information
-	result = getnodeset (doc, xpath);
-	if (result) {
-		nodeset = result->nodesetval;
-		for (i=0; i < nodeset->nodeNr; i++) {
-            printf("way id: %s\n", xmlGetProp( nodeset->nodeTab[i], BAD_CAST "id" ));
-            xmlNodePtr cur = nodeset->nodeTab[i]->children;
-            while(cur != NULL)
-            {
-                if (cur->type == XML_ELEMENT_NODE) 
-                {   
-                    //printf("\t%s", cur->name);
-                    if (!(xmlStrcmp(cur->name, BAD_CAST "nd")))
-                    {
-                        keyword = xmlGetProp(cur, BAD_CAST "ref");
-                        printf("\tref is %s\n", keyword);
-                    }
-                    //cur = cur->next;
-                }
-                cur = cur->next;
-            }
-			//keyword = xmlGetProp(nodeset->nodeTab[i], BAD_CAST "ref");
-		    //printf("keyword: %s\n", keyword);
-		    //xmlFree(keyword);
-		}
-		xmlXPathFreeObject (result);
-	}
+    /* printf("check, %d\n", nb);
+
+    for(int i = 0; i < nb; i++)
+    {
+        printf("the node id is %ld\n", nodes[0][i].id);
+        printf("His latitude is %lf his lontitude is %lf\n", nodes[0][i].lat, nodes[0][i].lon);
+    } */
+
+    xml_way_t** ways = (xml_way_t **) malloc(sizeof(xml_way_t*));
+
+    nb = 0;
+    getAllWay(doc, ways, &nb);
+
+    printf("check completd, ways nb is , %d\n", nb);
+
+    free(nodes);
 	xmlFreeDoc(doc);
 	xmlCleanupParser();
+
 	return (1);
 }
