@@ -112,7 +112,49 @@ void getAllNodes(xmlNode * a_node)
     }
 }
 
-void getAllWay(xmlDoc* doc, xml_way_t* ways)
+void getAllNodes(xmlDocPtr doc, xml_node_t** nodes, int* nb)
+{
+    xmlChar* xpath = (xmlChar *) ("/osm/node");
+    xmlXPathObjectPtr result;
+    result = getnodeset(doc, xpath);
+    xmlNodeSetPtr nodeset;
+    //nb = (int *) malloc(sizeof(int));
+    *nb = 0;
+    if(result)
+    {
+
+        nodeset = result->nodesetval;
+        nodes[0] = (xml_node_t *) malloc(sizeof(xml_node_t) * result->nodesetval->nodeNr);
+        printf("size of node is %d\n", nodeset->nodeNr);
+        for(int i = 0; i < nodeset->nodeNr; i++)
+        {
+            //printf("node id is: %s\n", xmlGetProp(nodeset->nodeTab[i], BAD_CAST "id"));
+            
+            xmlNodePtr cur = nodeset->nodeTab[i];
+            
+                if(cur->type == XML_ELEMENT_NODE)
+                {
+                    
+                    //if(!(xmlStrcmp(cur->name, BAD_CAST "node")))
+                    if(!(xmlStrcmp ( cur->name, ( const xmlChar * ) "node" )))
+                    {
+                        //printf("cur name is %s\n", cur->name);
+                        nodes[0][i].id = getID(cur);
+                        nodes[0][i].lat = getLat(cur);
+                        nodes[0][i].lon = getLon(cur);
+                        //printf("id is %ld\n", nodes[0][i].id);
+  
+                        (*nb)++;                 
+                    }
+                }
+                //cur = cur->next;
+            
+        }
+        xmlXPathFreeObject (result);
+    }
+}
+
+void getAllWay(xmlDoc* doc, xml_way_t** ways, int *nb)
 {
     xmlChar *xpath = (xmlChar*) ("/osm/way[tag/@k='highway']");
 	xmlNodeSetPtr nodeset;
@@ -120,34 +162,35 @@ void getAllWay(xmlDoc* doc, xml_way_t* ways)
 	int i;
 
     result = getnodeset(doc, xpath);
-    int cnt = 1;
-    ways = (xml_way_t *) malloc(sizeof(xml_way_t) * cnt);
+
 
     if(result)
     {
+        nodeset = result->nodesetval;
+        ways[0] = (xml_way_t *) malloc(sizeof(xml_way_t) * result->nodesetval->nodeNr);
         nodeset = result->nodesetval;
 
         for(i = 0; i < nodeset->nodeNr; i++)
         {
             xmlNodePtr cur = nodeset->nodeTab[i]->children;
-            ways[cnt - 1].id = getID(nodeset->nodeTab[i]);
-            long* temp = (long *) malloc(sizeof(long));
+            ways[0][i].id = getID(nodeset->nodeTab[i]);
+            ways[0][i].ref = (long *) malloc(sizeof(long));
             while(cur != NULL)
             {
                 if(cur->type == XML_ELEMENT_NODE)
                 {
-                    int cnt_ref = 0;
+                    int cnt_ref = 1;
                     if(!(xmlStrcmp(cur->name, BAD_CAST "nd")))
                     {
-                        temp[cnt_ref] = atol((const char *) xmlGetProp(cur, BAD_CAST "ref"));
+                        ways[0][i].ref[cnt_ref - 1] = atol((const char *) xmlGetProp(cur, BAD_CAST "ref"));
                         cnt_ref++;
+                        ways[0][i].ref = realloc(ways[0][i].ref, sizeof(long) * cnt_ref);
                     }
                 }
                 cur = cur->next;
             }
-            ways[cnt - 1].ref = temp;
-            cnt++;
-            ways = realloc(ways, sizeof(xml_way_t) * cnt);
+            (*nb)++;
         }
     }
+    xmlXPathFreeObject (result);
 }

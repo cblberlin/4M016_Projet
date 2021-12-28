@@ -42,9 +42,9 @@ double getLon(xmlNode* cur);
 
 xmlXPathObjectPtr getnodeset (xmlDocPtr doc, xmlChar *xpath);
 
-void getAllNodes(xmlNode * a_node);
+void getAllNodes(xmlDocPtr doc, xml_node_t** nodes, int* nb);
 
-void getAllWay(xmlDoc* doc, xml_way_t* ways);
+void getAllWay(xmlDoc* doc, xml_way_t** ways, int *nb);
 
 void print_element_names(xmlNode * a_node);
 

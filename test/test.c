@@ -3,38 +3,44 @@
 #include <libxml/parser.h>
 #include <libxml/tree.h>
 #include <libxml/xpath.h>
+#include "uthash.h"
 
 typedef struct xml_node_t
 {
-    long id;
-    double lon;
-    double lat;
+    const char* id;
+    const char* lon;
+    const char* lat;
 }xml_node_t;
+
+typedef struct xml_node_ht
+{
+    const char* ref;
+    UT_hash_handle hh;
+}xml_node_ht;
 
 
 typedef struct xml_way_t
 {
-    long id;
-    long* ref;
+    const char* id;
+    const char** ref;
+    int nb_ref;
 }xml_way_t;
 
-long getID(xmlNode* cur)
+const char* getID(xmlNode* cur)
 {
-    long id = atol( (const char *) xmlGetProp(cur, (const xmlChar *) "id" ));
+    const char* id = (const char *) xmlGetProp(cur, (const xmlChar *) "id" );
     return id;
 }
 
-double getLat(xmlNode* cur)
+const char* getLat(xmlNode* cur)
 {
-    char* ptr;
-    double lat = strtod( (const char *) xmlGetProp(cur, (const xmlChar *) "lat" ), &ptr);
+    const char* lat = (const char *) xmlGetProp(cur, (const xmlChar *) "lat" );
     return lat;
 }
 
-double getLon(xmlNode* cur)
+const char* getLon(xmlNode* cur)
 {
-    char* ptr;
-    double lon = strtod( (const char *) xmlGetProp(cur, (const xmlChar *) "lon" ), &ptr);
+    const char* lon = (const char *) xmlGetProp(cur, (const xmlChar *) "lon" );
     return lon;
 }
 
@@ -51,26 +57,6 @@ getdoc (char *docname) {
 	return doc;
 }
 
-void print_element_names(xmlNode * a_node)
-{
-    xmlNode *cur_node = NULL;
-
-    for (cur_node = a_node; cur_node; cur_node = cur_node->next) {
-        if (cur_node->type == XML_ELEMENT_NODE) 
-        {
-            if(!(xmlStrcmp ( cur_node->name, ( const xmlChar * ) "node" )))
-            {
-                printf("node type: Element, name: %s ID is %ld\n", cur_node->name, getID(cur_node));
-                //printf("node type: Element, name: %s ID is %ld\n", cur_node->name, xmlGetProp(cur_node, (const xmlChar *) "id"));
-                printf("His latitude is %lf his lontitude is %lf\n", getLat(cur_node), getLon(cur_node));
-                //xmlChar* buff = xmlNodeGetContent(cur_node);
-                //printf("%s\n", buff);
-
-            }
-        }
-        print_element_names(cur_node->children);
-    }
-}
 
 xmlXPathObjectPtr getnodeset (xmlDocPtr doc, xmlChar *xpath)
 {
@@ -158,27 +144,43 @@ void getAllWay(xmlDoc* doc, xml_way_t** ways, int *nb)
     {
         nodeset = result->nodesetval;
         ways[0] = (xml_way_t *) malloc(sizeof(xml_way_t) * result->nodesetval->nodeNr);
+
         nodeset = result->nodesetval;
 
         for(i = 0; i < nodeset->nodeNr; i++)
         {
             xmlNodePtr cur = nodeset->nodeTab[i]->children;
+            ways[0][i].id = (const char *) malloc(sizeof(const char));
             ways[0][i].id = getID(nodeset->nodeTab[i]);
-            ways[0][i].ref = (long *) malloc(sizeof(long));
+            ways[0][i].ref = (const char **) malloc(sizeof(const char *));
+
+            ways[0][i].nb_ref = 0;
+
+            printf("before while i = %d ways[0][%d].nb_ref = %d\n", i, i, ways[0][i].nb_ref);
             while(cur != NULL)
             {
                 if(cur->type == XML_ELEMENT_NODE)
                 {
-                    int cnt_ref = 1;
                     if(!(xmlStrcmp(cur->name, BAD_CAST "nd")))
                     {
-                        ways[0][i].ref[cnt_ref - 1] = atol((const char *) xmlGetProp(cur, BAD_CAST "ref"));
-                        cnt_ref++;
-                        ways[0][i].ref = realloc(ways[0][i].ref, sizeof(long) * cnt_ref);
+                        /* //printf("check for i = %d\n", i);
+                        ways[0][i].ref[ ways[0][i].nb_ref ] = (const char *) xmlGetProp(cur, BAD_CAST "ref");
+                        ways[0][i].ref = realloc(ways[0][i].ref, sizeof(const char **) * ways[0][i].nb_ref +2);
+                        printf("check for realloc size of %d\n", ways[0][i].nb_ref + 2);
+                        ways[0][i].ref[ways[0][i].nb_ref++] = (const char *) malloc(sizeof(const char));
+                        
+                        printf("check for i = %d, ways[0][%d].nb_ref = %d\n", i, i, ways[0][i].nb_ref); */
+                        ways[0][i].ref[ ways[0][i].nb_ref ] = (const char *) malloc(sizeof(const char)); 
+                        ways[0][i].ref[ ways[0][i].nb_ref ] = (const char *) xmlGetProp(cur, BAD_CAST "ref");
+                        printf("\tcheck for i = %d ways[0][%d].nb_ref = %d\n", i, i, ways[0][i].nb_ref);
+                        ways[0][i].ref = realloc(ways[0][i].ref, sizeof(const char *) * (ways[0][i].nb_ref + 2));
+                        ways[0][i].nb_ref++;
                     }
                 }
+                
                 cur = cur->next;
             }
+            printf("\tafter while i = %d cnt_ref = %d\n\n", i,  ways[0][i].nb_ref);
             (*nb)++;
         }
     }
@@ -202,24 +204,50 @@ main(int argc, char **argv) {
 
     xml_node_t** nodes = (xml_node_t **) malloc(sizeof(xml_node_t*));
     nodes[0] = (xml_node_t *) malloc(sizeof(xml_node_t));
-    int nb;
-    getAllNodes(doc, nodes, &nb);
+    int nb_node;
+    getAllNodes(doc, nodes, &nb_node);
 
-    /* printf("check, %d\n", nb);
+    printf("check for get Nodes, %d\n", nb_node);
 
-    for(int i = 0; i < nb; i++)
+    /* for(int i = 0; i < nb_node; i++)
     {
-        printf("the node id is %ld\n", nodes[0][i].id);
-        printf("His latitude is %lf his lontitude is %lf\n", nodes[0][i].lat, nodes[0][i].lon);
+        printf("the node id is %s\n", nodes[0][i].id);
+        printf("His latitude is %s his lontitude is %s\n", nodes[0][i].lat, nodes[0][i].lon);
     } */
 
     xml_way_t** ways = (xml_way_t **) malloc(sizeof(xml_way_t*));
 
-    nb = 0;
-    getAllWay(doc, ways, &nb);
+    int nb_way = 0;
+    //int *nb_ref = malloc(sizeof(int *) * nb_way);
+    getAllWay(doc, ways, &nb_way);
 
-    printf("check completd, ways nb is , %d\n", nb);
+    printf("\n\ncheck get ways started, way nb is %d\n", nb_way);
 
+    for(int i = 0; i < nb_way; i++)
+    {
+        printf("way id is %s, nb of ref is %d\n", ways[0][i].id, ways[0][i].nb_ref);
+        for(int j = 0; j < ways[0][i].nb_ref; j++)
+        {
+            printf("\t the ref is %s\n", ways[0][i].ref[j]);
+        }
+    }
+
+    printf("\n\ncheck get ways completd\n");
+
+
+ 
+    printf("\n\ncheck hash table\n");
+
+    xml_node_ht l, node, *xml_node_hashtable = NULL;
+    for(int i = 0; i < nb_way; i++)
+    {
+        node = (record_t *)malloc(sizeof *r);
+
+        memset(r, 0, sizeof *r);
+        node.ref = nodes[0][i].id;
+        HASH_ADD(hh, ref, )
+    }
+    
     free(nodes);
 	xmlFreeDoc(doc);
 	xmlCleanupParser();
