@@ -256,7 +256,7 @@ int main(int argc, char **argv)
         {
             printf("those arrays are not the same! you need to debug\n");
         }
-        printf("%d\n", !(fabs(dist[0] - dist2[0]) < 1e-9));
+        
     }
 
     

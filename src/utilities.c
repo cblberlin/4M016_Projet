@@ -152,7 +152,7 @@ bool compare_result(int n, double* dist1, double* dist2, int* prev1, int* prev2)
 {
     for(int i = 0; i < n; i++)
     {
-        if( (dist1[i] == INFINITY && dist2[i] == INFINITY) || (fabs(dist1[i] - dist2[i]) < 1e-9)  || (prev1[i] != prev2[i]))
+        if (prev1[i] != prev2[i])
         {
             printf("prev1[%d] = %d, prev2[%d] = %d\n", i, prev1[i], i, prev2[i]);
             printf("dist1[%d] = %f, dist2[%d] = %f\n", i, dist1[i], i, dist2[i]);
