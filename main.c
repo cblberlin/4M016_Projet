@@ -226,20 +226,19 @@ int main(int argc, char **argv)
         {
             double density;
             double max_weight;
-            printf("we need to test for the dense graph, enter the density between 0.1 to 1.\n");
+            printf("we need to test for the sparse graph, enter the density between 3 to 5\n");
             scanf("%lf", &density);
-            printf("enter the max weight between 0.1 to 1.\n");
+            printf("enter the max weight:\n");
             scanf("%lf", &max_weight);
             // run time for dijkstra naive with adjacency matrix on dense graph
-            double* time_dijkstra_naive_m_graph = (double *) calloc(sizeof(double) , 100);
-            double* time_dijkstra_min_heap_m_graph = (double *) calloc(sizeof(double) , 100);
-            double* time_dijkstra_naive_l_graph = (double *) calloc(sizeof(double) , 100);
-            double* time_dijkstra_min_heap_l_graph = (double *) calloc(sizeof(double) , 100);
+            double* time_dijkstra_naive_m_graph = (double *) calloc(sizeof(double) , 20);
+            double* time_dijkstra_min_heap_m_graph = (double *) calloc(sizeof(double) , 20);
+            double* time_dijkstra_min_heap_l_graph = (double *) calloc(sizeof(double) , 20);
 
-            for(int i = 1000; i <= 10000; i = i + 1000)
+            for(int i = 1000; i <= 20000; i = i + 1000)
             {
                 
-                int nb_edge = (i * (i - 1) / 2) * density;
+                int nb_edge = (int) (i * density);
                 //printf("%d", nb_edge);
                 M_Graph* g = (M_Graph * ) malloc(sizeof(M_Graph));
                 g = init_graph(i);
@@ -287,52 +286,40 @@ int main(int argc, char **argv)
 
                 clock_t begin_3 = clock();
 
-                single_source_dijkstra_adj_list(l_g, 0, dist3, prev3);
+                single_source_dijkstra_adj_list_min_heap(l_g, 0, dist3, prev3);
 
                 clock_t end_3 = clock();
 
                 double time_spent_3 = (double)(end_3 - begin_3) / CLOCKS_PER_SEC;
                 printf("run time is %.3lf when i = %d\n", time_spent_3, i);
-                time_dijkstra_naive_l_graph[(i - 1000) / 1000] = time_spent_3;
+                time_dijkstra_min_heap_l_graph[(i - 1000) / 1000] = time_spent_3;
 
                 free(dist3);
                 free(prev3);
 
-                double* dist4 = (double *) malloc(sizeof(double) * i);
-                int* prev4 = (int *) malloc(sizeof(int) * i);
-
-                clock_t begin_4 = clock();
-
-                single_source_dijkstra_adj_list_min_heap(l_g, 0, dist4, prev4);
-
-                clock_t end_4 = clock();
-
-                double time_spent_4 = (double)(end_4 - begin_4) / CLOCKS_PER_SEC;
-                printf("run time is %.3lf when i = %d\n", time_spent_4, i);
-                time_dijkstra_min_heap_l_graph[(i - 1000) / 1000] = time_spent_4;
-
-                free(dist4);
-                free(prev4);
 
                 free_L_Graph(l_g);
             }
             FILE* f;
-            
-            char arr[sizeof(density)];
+        
 
-            memcpy(arr,&density,sizeof(density));
+            char* arr = (char *) malloc(sizeof(char));
+            arr = "result/density_7_sparse_graph.txt";
+            
 
             f = fopen(arr, "w");
 
-            for(int i = 0; i < 100; i++)
+            for(int i = 0; i < 20; i++)
             {
-                fprintf(f, "%lf\t%lf\t%lf\t%lf\t", time_dijkstra_naive_m_graph[i],
+                fprintf(f, "%d\t%lf\t%lf\t%lf", (i + 1) * 1000,time_dijkstra_naive_m_graph[i],
                                                 time_dijkstra_min_heap_m_graph[i],
-                                                time_dijkstra_naive_l_graph[i],
                                                 time_dijkstra_min_heap_l_graph[i]);
                 fprintf(f, "\n");
             }
             fclose(f);
+            free(time_dijkstra_naive_m_graph);
+            free(time_dijkstra_min_heap_m_graph);
+            free(time_dijkstra_min_heap_l_graph);
         }
     }
     // parsing osm file
