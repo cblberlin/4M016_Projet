@@ -136,5 +136,3 @@ void print_result(M_Graph*g, int src, double* dist, int* prev)
         printf("\n\n");
     }
 }
-
-void generate_test_case(int* )
