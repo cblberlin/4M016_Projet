@@ -17,7 +17,8 @@
 
 const char* ALPHAPHET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
-char* int2char(int n){
+char* int2char(int n)
+{
     if(n < 26){
         char* c = (char* ) malloc(sizeof(char));
         *c = n + 'A';
@@ -135,4 +136,30 @@ void print_result(M_Graph*g, int src, double* dist, int* prev)
         //printf("%lf\t%d", dist[i], prev[i]);
         printf("\n\n");
     }
+}
+
+void printresult(L_Graph*g, int src, double* dist, int* prev)
+{
+    for(int i = 0; i < g->N_vertex; i++){
+        printf("shortest(%s, %s)=%f\n", g->Names[src], g->Names[i], dist[i]);
+        find_path(g, src, i, prev);
+        //printf("%lf\t%d", dist[i], prev[i]);
+        printf("\n\n");
+    }
+}
+
+bool compare_result(int n, double* dist1, double* dist2, int* prev1, int* prev2)
+{
+    for(int i = 0; i < n; i++)
+    {
+        if( (dist1[i] == INFINITY && dist2[i] == INFINITY) || (fabs(dist1[i] - dist2[i]) < 1e-9)  || (prev1[i] != prev2[i]))
+        {
+            printf("prev1[%d] = %d, prev2[%d] = %d\n", i, prev1[i], i, prev2[i]);
+            printf("dist1[%d] = %f, dist2[%d] = %f\n", i, dist1[i], i, dist2[i]);
+            printf("%d %d %d\n", !(dist1[i] == INFINITY && dist2[i] == INFINITY), !(fabs(dist1[i] - dist2[i]) < 1e-9), (prev1[i] != prev2[i]));
+            return false;
+        }
+        
+    }
+    return true;
 }

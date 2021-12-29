@@ -101,6 +101,7 @@ M_Graph* read_graph(char* filename){
             token = strtok(NULL, " ");
             w = strtod(token, &eptr);
             g->weights[a][b] = w;
+            g->weights[b][a] = w;
             count++;
         }
     }

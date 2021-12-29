@@ -21,15 +21,15 @@ void single_source_dijkstra(M_Graph* g, int src, double* dist, int* prev)
     for (i = 0; i < g->N_vertex; i++)
     {
         flag[i] = 0;              
-        prev[i] = 0;              
+        prev[i] = -1;              
         dist[i] = g->weights[src][i];
     }
 
     // initialisation for src
     flag[src] = 1;
     dist[src] = 0;
-
-    // 遍历G.vexnum-1次；每次找出一个顶点的最短路径。traverse all nodes, find the minimum distance
+    prev[src] = src;
+    // traverse all nodes, find the minimum distance
     for (i = 1; i < g->N_vertex; i++)
     {
         // for all nodes not visited yet, find the node with shortest distance with src
@@ -48,7 +48,7 @@ void single_source_dijkstra(M_Graph* g, int src, double* dist, int* prev)
         // correct the shortest distance for the rest node
         for (j = 0; j < g->N_vertex; j++)
         {
-            tmp = (g->weights[k][j]==INFINITY ? INFINITY : (min + g->weights[k][j])); // 防止溢出
+            tmp = (g->weights[k][j]==INFINITY ? INFINITY : (min + g->weights[k][j]));
             if (flag[j] == 0 && (tmp  < dist[j]) )
             {
                 dist[j] = tmp;
@@ -57,7 +57,7 @@ void single_source_dijkstra(M_Graph* g, int src, double* dist, int* prev)
         }
     }
 
-
+    free(flag);
     //printf("dijkstra(%s): \n", g->Names[src]);
     //for (i = 0; i < g->N_vertex; i++)
         //printf("  shortest(%s, %s)=%.3f\n", g->Names[src], g->Names[i], dist[i]);
@@ -65,8 +65,8 @@ void single_source_dijkstra(M_Graph* g, int src, double* dist, int* prev)
 
 void single_source_dijkstra_min_heap(M_Graph* g, int src, double* dist, int* prev){
     // initialisation of min heap
-    min_heap* h = malloc(sizeof(min_heap));
-    h = init_heap(g->N_vertex);
+    min_heap* h = (min_heap *) malloc(sizeof(min_heap));
+    init_heap(h, g->N_vertex);
 
     // initialisation of array of distance and array of previous node
     // initialise dist as all node have distance infinity except the starting point src is 0.
@@ -81,6 +81,7 @@ void single_source_dijkstra_min_heap(M_Graph* g, int src, double* dist, int* pre
     node s;
     s.index = src;
     s.weight = 0.;
+    prev[src] = src;
     Insert(h, s);
     //print_heap(h);
     while (!heap_empty(h))
@@ -115,6 +116,7 @@ void single_source_dijkstra_min_heap(M_Graph* g, int src, double* dist, int* pre
             }
         }
     }
+    free_heap(h);
 }
 
 void single_source_dijkstra_adj_list(L_Graph* g, int src, double* dist, int* prev)
@@ -126,14 +128,15 @@ void single_source_dijkstra_adj_list(L_Graph* g, int src, double* dist, int* pre
 
     for(i = 0; i < g->N_vertex; i++){
         flag[i] = 0;
-        prev[i] = 0;
+        prev[i] = -1;
         dist[i] = get_weight(g, src, i);
     }
 
 
     flag[src] = 1;
     dist[src] = 0;
-
+    prev[src] = src;
+    
     for(i = 0; i < g->N_vertex; i++){
         min = INFINITY;
         for(j = 0; j < g->N_vertex; j++){
@@ -153,16 +156,17 @@ void single_source_dijkstra_adj_list(L_Graph* g, int src, double* dist, int* pre
             }
         }
     }
-
-    printf("dijkstra(%s): \n", g->Names[src]);
+    free(flag);
+    /* printf("dijkstra(%s): \n", g->Names[src]);
     for (i = 0; i < g->N_vertex; i++)
-        printf("  shortest(%s, %s)=%.3f\n", g->Names[src], g->Names[i], dist[i]);
+        printf("  shortest(%s, %s)=%.3f\n", g->Names[src], g->Names[i], dist[i]); */
 }
 
 void single_source_dijkstra_adj_list_min_heap(L_Graph* g, int src, double* dist, int* prev){
     // initialisation of min heap
-    min_heap* h = malloc(sizeof(min_heap));
-    h = init_heap(g->N_vertex);
+    min_heap* h = (min_heap *) malloc(sizeof(min_heap));
+    init_heap(h, g->N_vertex);
+    //printf("capacity of heap is %d\n", h->capacity);
 
     // initialisation of array of distance and array of previous node
     // initialise dist as all node have distance infinity except the starting point src is 0.
@@ -173,10 +177,14 @@ void single_source_dijkstra_adj_list_min_heap(L_Graph* g, int src, double* dist,
         prev[i] = -1;
     }
 
+    prev[src] = src;
+
     // Insert the first node src in the heap
     node s;
     s.index = src;
     s.weight = 0.;
+    //printf("capacity of heap is %d\n", h->capacity);
+
     Insert(h, s);
     
     while (!heap_empty(h))
@@ -218,7 +226,8 @@ void single_source_dijkstra_adj_list_min_heap(L_Graph* g, int src, double* dist,
             }
         }
     }
-    printf("dijkstra(%s): \n", g->Names[src]);
+    free_heap(h);
+    /* printf("dijkstra(%s): \n", g->Names[src]);
     for (int i = 0; i < g->N_vertex; i++)
-        printf("  shortest(%s, %s)=%.3f\n", g->Names[src], g->Names[i], dist[i]);
+        printf("  shortest(%s, %s)=%.3f\n", g->Names[src], g->Names[i], dist[i]); */
 }

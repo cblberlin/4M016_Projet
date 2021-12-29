@@ -42,7 +42,7 @@ typedef struct min_heap_{
 
 void swap(node* x, node* y);
 
-min_heap* init_heap(int Max_capacity);
+void init_heap(min_heap* h, int Max_capacity);
 
 bool heap_empty(const min_heap* heap);
 

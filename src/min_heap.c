@@ -12,12 +12,11 @@ void swap(node* x, node* y) {
     *y = temp ;
 }
 
-min_heap* init_heap(int Max_capacity){
-    min_heap* h = (min_heap *) malloc(sizeof(min_heap));
+void init_heap(min_heap* h, int Max_capacity)
+{
     h->index = 0;
     h->capacity = Max_capacity;
     h->nodes = (node *) malloc(Max_capacity * sizeof(node));
-    return h;
 }
 
 bool heap_empty(const min_heap* heap){
@@ -52,13 +51,19 @@ void heapify(min_heap*h, int i){
 }
 
 void Insert(min_heap *h, node x) {
+    //printf("inserting node x.%d, h->index = %d h->capacity = %d !\n", x.index, h->index, h->capacity);
     if(h->index == h->capacity){
-        printf("heap overflowed !\n");
+        printf("\nheap overflowed when inserting node x.%d, h->index = %d h->capacity = %d !\n", x.index, h->index, h->capacity);
+
         return;
     }
     h->index++;
     h->nodes = realloc(h->nodes, h->index * sizeof(node));
-    h->capacity *= 2;
+    if(h->index == h->capacity)
+    {
+        h->capacity++;
+    }
+
     int i = h->index - 1;
     h->nodes[i] = x;
     while (i != 0 && h->nodes[PARENT(i)].weight > h->nodes[i].weight){

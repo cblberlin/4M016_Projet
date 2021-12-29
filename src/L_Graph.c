@@ -226,6 +226,28 @@ L_Graph* readGraph(char* filename)
     return g;
 }
 
+void convert_from_M_Graph(L_Graph* g1, M_Graph* g2)
+{
+    g1->N_edge = g2->N_edge;
+    g1->N_vertex = g2->N_vertex;
+    g1->Names = g2->Names;
+
+    for(int i = 0; i < g2->N_vertex; i++)
+    {
+        for(int j = i; j < g2->N_vertex; j++)
+        {
+            if(g2->weights[i][j] != INFINITY && i != j)
+            {
+                //printf("check!\n");
+                addEdge(g1, i, j, g2->weights[i][j]);
+                g1->N_edge--;
+                addEdge(g1, j, i, g2->weights[i][j]);
+                g1->N_edge--;
+            }
+        }
+    }
+}
+
 /*
     Create L_Graph from an osm file
 */
