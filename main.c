@@ -55,21 +55,21 @@ int main(int argc, char **argv)
     else if(argc == 2)
     {
         char* docname;
-        xmlDocPtr doc = NULL;
         docname = argv[1];
 
-        doc = getdoc(docname);
-        if (doc == NULL) {
-            printf("error: could not parse file %s\n", argv[1]);
-        }
-        
-        xmlNode *root_element = NULL;
-        root_element = xmlDocGetRootElement(doc);
-        //print_element_names(xmlDocGetRootElement(doc));
-        //print_element_names(root_element);
-        getAllNodes(root_element);
+        L_Graph* g = (L_Graph*) malloc(sizeof(L_Graph));
 
+        readOSM(g, docname);
+        if(g->N_edge && g->N_edge)
+        {
+            printf("the osm file was loaded successfully and the graph have %d vertices and %d edges\n\n", g->N_vertex, g->N_edge);
+        }
+        double* dist = (double *) malloc(sizeof(double) * g->N_vertex);
+        int* prev = (int *) malloc(sizeof(int) * g->N_vertex);
+
+        //single_source_dijkstra_adj_list(g, 0, dist, prev);
         
+        single_source_dijkstra_adj_list_min_heap(g, 0, dist, prev);
     }
     return 0;
 }

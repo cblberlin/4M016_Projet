@@ -57,7 +57,7 @@ void single_source_dijkstra(M_Graph* g, int src, double* dist, int* prev)
         }
     }
 
-    // 打印dijkstra最短路径的结果
+
     //printf("dijkstra(%s): \n", g->Names[src]);
     //for (i = 0; i < g->N_vertex; i++)
         //printf("  shortest(%s, %s)=%.3f\n", g->Names[src], g->Names[i], dist[i]);
@@ -153,6 +153,10 @@ void single_source_dijkstra_adj_list(L_Graph* g, int src, double* dist, int* pre
             }
         }
     }
+
+    printf("dijkstra(%s): \n", g->Names[src]);
+    for (i = 0; i < g->N_vertex; i++)
+        printf("  shortest(%s, %s)=%.3f\n", g->Names[src], g->Names[i], dist[i]);
 }
 
 void single_source_dijkstra_adj_list_min_heap(L_Graph* g, int src, double* dist, int* prev){
@@ -214,4 +218,7 @@ void single_source_dijkstra_adj_list_min_heap(L_Graph* g, int src, double* dist,
             }
         }
     }
+    printf("dijkstra(%s): \n", g->Names[src]);
+    for (int i = 0; i < g->N_vertex; i++)
+        printf("  shortest(%s, %s)=%.3f\n", g->Names[src], g->Names[i], dist[i]);
 }

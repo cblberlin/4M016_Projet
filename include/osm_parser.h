@@ -1,44 +1,42 @@
 #ifndef OSM_PARSER_H
 #define OSM_PARSER_H
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 #include <libxml/parser.h>
 #include <libxml/tree.h>
 #include <libxml/xpath.h>
 #include <libxml/xpathInternals.h>
-#include <libxml/HTMLparser.h>
-#include "L_Graph.h"
-#include "M_Graph.h"
+
 #include "uthash.h"
 
 typedef struct xml_node_t
 {
-    long id;
-    double lon;
-    double lat;
+    const char* id;
+    const char* lon;
+    const char* lat;
 }xml_node_t;
 
-typedef struct xml_node_hash_table
+typedef struct xml_node_ht
 {
-    xml_node_t node;
+    const char* ref;
+    int index;
     UT_hash_handle hh;
-}xml_node_hash_table;
+}xml_node_ht;
+
 
 typedef struct xml_way_t
 {
-    long id;
-    long* ref;
+    const char* id;
+    const char** ref;
+    int nb_ref;
 }xml_way_t;
 
 xmlDocPtr getdoc (char *docname);
 
-long getID(xmlNode* cur);
+const char* getID(xmlNode* cur);
 
-double getLat(xmlNode* cur);
+const char* getLat(xmlNode* cur);
 
-double getLon(xmlNode* cur);
+const char* getLon(xmlNode* cur);
 
 xmlXPathObjectPtr getnodeset (xmlDocPtr doc, xmlChar *xpath);
 
@@ -46,7 +44,11 @@ void getAllNodes(xmlDocPtr doc, xml_node_t** nodes, int* nb);
 
 void getAllWay(xmlDoc* doc, xml_way_t** ways, int *nb);
 
-void print_element_names(xmlNode * a_node);
+double deg2rad(double deg);
+
+double rad2deg(double rad);
+
+double distance(xml_node_t x, xml_node_t y);
 
 
 #endif

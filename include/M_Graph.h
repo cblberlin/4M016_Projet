@@ -1,14 +1,6 @@
 #ifndef M_GRAPHE_H
 #define M_GRAPHE_H
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <math.h>
-
-#ifdef INFINITY
-
-#endif
-
 typedef struct M_Graph_{
     char** Names;       // the array of characters which represente the name of each vertex;
     int N_vertex;       // the number of vertex

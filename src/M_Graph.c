@@ -2,9 +2,17 @@
 #include <string.h>
 #include <time.h>
 #include <string.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
+
 #include "M_Graph.h"
 #include "utilities.h"
 
+
+#ifdef INFINITY
+
+#endif
 
 /*
 create empty graph with n vertices
@@ -43,7 +51,13 @@ M_Graph* init_graph(int n){
 }
 
 /*
-    read graph from a file
+    read simple graph file
+    nb_vertex nb_edge
+    src dest w
+    .
+    .
+    .
+    src dest w
 */
 M_Graph* read_graph(char* filename){
     M_Graph* g = (M_Graph*) malloc(sizeof(M_Graph));

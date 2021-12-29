@@ -1,16 +1,6 @@
 #ifndef L_GRAPHE_H
 #define L_GRAPHE_H
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <math.h>
-
-#include "osm_parser.h"
-
-#ifdef INFINITY
-
-#endif
-
 typedef struct adjacency_list_node_ {  // Represents edges between nodes
   int nodeID;  // Other end of the edge
   double weight;  // Weight of the edge
@@ -44,4 +34,7 @@ void create_L_graph_random(L_Graph* g, int n, int e, double max_wweight);
 double get_weight(L_Graph* g, int i, int j);
 
 L_Graph* readGraph(char* filename);
+
+void readOSM(L_Graph* g, char* filename);
+
 #endif
