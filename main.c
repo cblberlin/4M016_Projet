@@ -8,7 +8,7 @@
 int main(int argc, char **argv) 
 {
     // test for dijkstra naif approach with adjacency matrix presentation
-	if (argc == 1)
+    /* if (argc == 1)
     {
         int choice;
         printf("test with testcase or generate random graph? 1 for testcase 0 for random graph\n");
@@ -50,6 +50,10 @@ int main(int argc, char **argv)
             free(dist);
             free(prev);
             free_graph(g);
+
+        }else
+        {
+
         }
     }
     else if(argc == 2)
@@ -70,6 +74,8 @@ int main(int argc, char **argv)
         //single_source_dijkstra_adj_list(g, 0, dist, prev);
         
         single_source_dijkstra_adj_list_min_heap(g, 0, dist, prev);
-    }
+    } */
+
+    
     return 0;
 }

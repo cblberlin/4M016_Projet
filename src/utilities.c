@@ -1,5 +1,6 @@
 #include <string.h>
 #include <stdlib.h>
+#include <stdio.h>
 #include <math.h>
 #include <stdbool.h>
 
@@ -135,3 +136,5 @@ void print_result(M_Graph*g, int src, double* dist, int* prev)
         printf("\n\n");
     }
 }
+
+void generate_test_case(int* )

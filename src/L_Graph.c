@@ -1,9 +1,17 @@
 #include <assert.h>
 #include <string.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
 #include <time.h>
+
 #include "L_Graph.h"
 #include "utilities.h"
+#include "osm_parser.h"
 
+#ifdef INFINITY
+
+#endif
 
 /*
     Create an empty graph
@@ -57,6 +65,7 @@ void free_L_Graph(L_Graph* g)
 
 /*
     add an edge to graph, here we suppose that our graph is undirected
+    so when we create file from file don't forget to -1 because the edge number is defined at the beginning
 */
 void addEdge(L_Graph* g, int src, int dest, double weight)
 {
@@ -154,7 +163,132 @@ double get_weight(L_Graph* g, int i, int j)
     
 }
 
+/*
+    read simple graph file
+    nb_vertex nb_edge
+    src dest w
+    .
+    .
+    .
+    src dest w
+*/
 L_Graph* readGraph(char* filename)
 {
+    L_Graph* g = (L_Graph*) malloc(sizeof(L_Graph));
+    FILE* f;
+    f = fopen(filename, "r");
+    if(f == NULL)
+    {
+        printf("can't open file");
+        exit(EXIT_FAILURE);
+    }
+    char line[255];
+    int count = 0;
+    //printf("test\n");
+    //fgets(line, 255, f)
+    while(fgets(line, 255, f) != NULL)
+    {
+
+        if(count == 0)
+        {
+            char *token = strtok(line, " ");
+            int n;
+            int v;
+            n = atoi(token);
+            //printf("n = %d", n);
+            token = strtok(NULL, " ");
+            v = atoi(token);
+            //printf("v = %d", v);
+            g->N_vertex = n;
+            Create_L_Graph(g, n);
+            g->N_edge = v;
+            count++;
+        }else
+        {
+            int a, b;
+            double w;
+            char *eptr;
+            char *token = strtok(line, " ");
+            a = atoi(token);
+            token = strtok(NULL, " ");
+            b = atoi(token);
+            token = strtok(NULL, " ");
+            w = strtod(token, &eptr);
+            addEdge(g, a, b, w);
+            g->N_edge--;
+
+            addEdge(g, b, a, w);
+            g->N_edge--;
+            count++;
+        }
+    }
+    fclose(f);
+    return g;
+}
+
+/*
+    Create L_Graph from an osm file
+*/
+void readOSM(L_Graph* g, char* filename)
+{
+    xmlDocPtr doc;
+
+	doc = xmlParseFile(filename);;
+
+    if(doc == NULL)
+    {
+        fprintf(stderr,"Document not parsed successfully. \n");
+        return;
+    }
+
+    // get nodes information in osm file
+    xml_node_t** nodes = (xml_node_t **) malloc(sizeof(xml_node_t*));
+    nodes[0] = (xml_node_t *) malloc(sizeof(xml_node_t));
+    int nb_node;
+    getAllNodes(doc, nodes, &nb_node);
+
+    // create L_graph with n nodes and fill the name with node id
     
+    Create_L_Graph(g, nb_node);
+
+    for(int i = 0; i < nb_node; i++)
+    {
+        strcpy(g->Names[i], nodes[0][i].id);
+    }
+
+    // get edge information in osm file
+    xml_way_t** ways = (xml_way_t **) malloc(sizeof(xml_way_t*));
+
+    int nb_way = 0;
+    
+    getAllWay(doc, ways, &nb_way);
+
+    // create hash table to fill in L_graph
+    xml_node_ht *node_temp1, *node_temp2, *nodes_ht = NULL;
+    
+    for(int i = 0; i < nb_node; i++)
+    {
+        node_temp1 = (xml_node_ht *) malloc(sizeof(*node_temp1));
+        node_temp1->ref = nodes[0][i].id;
+        node_temp1->index = i;
+        HASH_ADD_KEYPTR( hh, nodes_ht, node_temp1->ref, strlen(node_temp1->ref), node_temp1 );
+    }
+
+    // traverse all ways and for each way, get the index of ref in the graph
+    for(int i = 0; i < nb_way; i++)
+    {
+        //printf("way id is %s, nb of ref is %d\n", ways[0][i].id, ways[0][i].nb_ref);
+        for(int j = 0; j < ways[0][i].nb_ref - 1; j++)
+        {
+            node_temp2 = (xml_node_ht *) malloc(sizeof(*node_temp2));
+            HASH_FIND_STR( nodes_ht, ways[0][i].ref[j], node_temp1);
+            HASH_FIND_STR( nodes_ht, ways[0][i].ref[j + 1], node_temp2);
+            if (node_temp1 && node_temp2)
+            {
+                double w = distance(nodes[0][node_temp1->index], nodes[0][node_temp2->index]);
+                addEdge(g, node_temp1->index, node_temp2->index, w);
+                addEdge(g, node_temp2->index, node_temp1->index, w);
+            }
+        }
+    }
 }
