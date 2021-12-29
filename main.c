@@ -1,4 +1,5 @@
 #include <math.h>
+#include <time.h>
 
 #include "M_Graph.h"
 #include "L_Graph.h"
@@ -221,6 +222,108 @@ int main(int argc, char **argv)
             free(prev4);
             free_graph(g);
             free_L_Graph(l_g);
+        }else
+        {
+            double density;
+            double max_weight;
+            printf("we need to test for the dense graph, enter the density between 0.1 to 1.\n");
+            scanf("%lf", &density);
+            scanf("%lf", &max_weight);
+            // run time for dijkstra naive with adjacency matrix on dense graph
+            double* time_dijkstra_naive_m_graph = (double *) malloc(sizeof(double) * 100);
+            double* time_dijkstra_min_heap_m_graph = (double *) malloc(sizeof(double) * 100);
+            double* time_dijkstra_naive_l_graph = (double *) malloc(sizeof(double) * 100);
+            double* time_dijkstra_min_heap_l_graph = (double *) malloc(sizeof(double) * 100);
+
+            for(int i = 1000; i <= 100000; i = i + 1000)
+            {
+                int nb_edge = (int) density * i * (i - 1) / 2;
+                M_Graph* g = (M_Graph * ) malloc(sizeof(M_Graph));
+                g = create_graph_random(g, i, nb_edge, max_weight);
+
+                double* dist1 = (double *) malloc(sizeof(double) * i);
+                int* prev1 = (int *) malloc(sizeof(int) * i);
+
+                clock_t begin_1 = clock();
+
+                single_source_dijkstra(g, 0, dist1, prev1);
+
+                clock_t end_1 = clock();
+                double time_spent_1 = (double)(end_1 - begin_1) / CLOCKS_PER_SEC;
+                time_dijkstra_naive_m_graph[(i - 1000) / 1000] = time_spent_1;
+
+                free(dist1);
+                free(prev1);
+
+                double* dist2 = (double *) malloc(sizeof(double) * i);
+                int* prev2 = (int *) malloc(sizeof(int) * i);
+                
+                clock_t begin_2 = clock();
+
+                single_source_dijkstra_min_heap(g, 0, dist2, prev2);
+
+                clock_t end_2 = clock();
+                double time_spent_2 = (double)(end_2 - begin_2) / CLOCKS_PER_SEC;
+                time_dijkstra_min_heap_m_graph[(i - 1000) / 1000] = time_spent_2;
+
+                free(dist2);
+                free(prev2);
+
+                L_Graph* l_g = (L_Graph *) malloc(sizeof(L_Graph));
+                Create_L_Graph(l_g, g->N_vertex);
+                convert_from_M_Graph(l_g, g);
+
+                free_graph(g);
+
+                double* dist3 = (double *) malloc(sizeof(double) * i);
+                int* prev3 = (int *) malloc(sizeof(int) * i);
+
+                clock_t begin_3 = clock();
+
+                single_source_dijkstra_adj_list(l_g, 0, dist3, prev3);
+
+                clock_t end_3 = clock();
+
+                double time_spent_3 = (double)(end_3 - begin_3) / CLOCKS_PER_SEC;
+                time_dijkstra_naive_l_graph[(i - 1000) / 1000] = time_spent_3;
+
+                free(dist3);
+                free(prev3);
+
+                double* dist4 = (double *) malloc(sizeof(double) * i);
+                int* prev4 = (int *) malloc(sizeof(int) * i);
+
+                clock_t begin_4 = clock();
+
+                single_source_dijkstra_adj_list_min_heap(l_g, 0, dist4, prev4);
+
+                clock_t end_4 = clock();
+
+                double time_spent_4 = (double)(end_4 - begin_4) / CLOCKS_PER_SEC;
+                time_dijkstra_min_heap_l_graph[(i - 1000) / 1000] = time_spent_4;
+
+                free(dist4);
+                free(prev4);
+
+                free_L_Graph(l_g);
+            }
+            FILE* f;
+            
+            char arr[sizeof(density)];
+
+            memcpy(arr,&density,sizeof(density));
+
+            f = fopen(arr, "w");
+
+            for(int i = 0; i < 100; i++)
+            {
+                fprintf(f, "%lf\t%lf\t%lf\t%lf\t", time_dijkstra_naive_m_graph[i],
+                                                time_dijkstra_min_heap_m_graph[i],
+                                                time_dijkstra_naive_l_graph[i],
+                                                time_dijkstra_min_heap_l_graph[i]);
+                fprintf(f, "\n");
+            }
+            fclose(f);
         }
     }
     // parsing osm file
