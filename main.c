@@ -238,7 +238,8 @@ int main(int argc, char **argv)
             for(int i = 1000; i <= 20000; i = i + 1000)
             {
                 
-                int nb_edge = (int) (i * density);
+                //int nb_edge = (int) (i * density);
+                int nb_edge = (int) ((i * (i - 1)) / 2 * density);
                 //printf("%d", nb_edge);
                 M_Graph* g = (M_Graph * ) malloc(sizeof(M_Graph));
                 g = init_graph(i);
@@ -304,7 +305,7 @@ int main(int argc, char **argv)
         
 
             char* arr = (char *) malloc(sizeof(char));
-            arr = "result/density_7_sparse_graph.txt";
+            arr = "result/density_0.5_dense_graph.txt";
             
 
             f = fopen(arr, "w");
